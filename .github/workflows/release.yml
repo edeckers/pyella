@@ -1,0 +1,26 @@
+name: Release to GitHub and PyPI
+on:
+  workflow_dispatch:
+
+env:
+  gh-release-user-name: Ely Deckers
+  python-version: 3.8
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and publish release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.python-version }}
+          architecture: x64
+      - run: make release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RELEASE_USER_EMAIL: ${{ secrets.GH_RELEASE_USER_EMAIL }}
+          GITHUB_RELEASE_USER_NAME: ${{ env.gh-release-user-name }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN}}

@@ -1,0 +1,92 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+authors = ["Ely Deckers"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+description = "This library brings common monads such `Maybe` and `Either` to your Python projects."
+documentation = "https://github.com/edeckers/pyella"
+homepage = ""
+include = [
+    "LICENSE",
+]
+keywords = [
+]
+license = "MPL-2.0"
+maintainers = ["Ely Deckers"]
+name = "pyella"
+readme = "README.md"
+repository = "https://github.com/edeckers/pyella.git"
+version = "0.0.0"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+
+[tool.poetry.dev-dependencies]
+bandit = "^1.7"
+black = {version = "^22.6.0", allow-prereleases = true}
+coverage = {extras = ["toml"], version = "^6.3.2"}
+isort = "^5.10.1"
+mypy = "^0.931"
+nox = "^2022.1.7"
+pre-commit = "^2.17"
+pre-commit-hooks = "^4.1"
+pytest = "^7"
+pytest-cov = "^3"
+python-semantic-release = "^7.25.2"
+
+#########################################################################################
+# Testing
+#########################################################################################
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+
+[tool.coverage.html]
+directory = "reports/coverage/html"
+
+[tool.coverage.xml]
+output = "reports/coverage/coverage.xml"
+
+#########################################################################################
+# Style checking
+#########################################################################################
+
+[tool.bandit]
+
+[tool.black]
+target-version = ["py38", "py39"]
+
+[tool.isort]
+profile = "black"
+
+#########################################################################################
+# Publishing
+#########################################################################################
+
+[tool.semantic_release]
+branch = "develop"
+build_command = "poetry build"
+commit_subject = "chore: release {version}"
+changelog_file = "README.md"
+changelog_placeholder = "DISABLE_CHANGELOG_HACK"
+major_on_zero = false
+version_pattern = [
+]
+version_toml = "pyproject.toml:tool.poetry.version"
+upload_to_repository = true

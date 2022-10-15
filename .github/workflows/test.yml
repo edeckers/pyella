@@ -1,0 +1,32 @@
+name: Run all tests
+on: 
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10" ]
+    name: Run tests for Python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - run: make test
+      - uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: src/reports/**/junit*.xml
+      - name: Archive test and coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-and-coverage-report
+          path: src/reports

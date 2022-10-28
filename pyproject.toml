@@ -85,7 +85,6 @@ build_command = "poetry build"
 commit_subject = "chore: release {version}"
 changelog_file = "README.md"
 changelog_placeholder = "DISABLE_CHANGELOG_HACK"
-major_on_zero = false
 version_pattern = [
 ]
 version_toml = "pyproject.toml:tool.poetry.version"

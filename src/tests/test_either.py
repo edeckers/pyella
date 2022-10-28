@@ -94,6 +94,37 @@ class TestEither(unittest.TestCase):
             "Calling `fmap` on Left should successfully return Left",
         )
 
+    def test_map_left_returns_expected_results(self):
+        # arrange
+        some_value = random_str()
+
+        some_left_value = random_int()
+        some_value_sq = _square(some_left_value)
+
+        some_right = pure(some_value)
+        some_left = left(some_left_value)
+
+        # act
+        right_result = some_right.map_left(_square)
+        left_result = some_left.map_left(_square)
+
+        # assert
+        self.assertIsInstance(
+            left_result,
+            Left,
+            "Calling `map_left` on Left should return Left with the mapping applied to its value",
+        )
+        self.assertEqual(
+            some_value_sq,
+            either(identity, lambda _: -1, left_result),
+            "Calling `map_left` on Left should return Left with the mapping applied to its value",
+        )
+        self.assertEqual(
+            -1,
+            either(identity, lambda _: -1, right_result),
+            "Calling `map_left` on Right should successfully return Right",
+        )
+
     def test_rights_and_lefts_return_expected_results(self):
         # arrange
         right_values = unique_ints()

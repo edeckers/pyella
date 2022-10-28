@@ -28,11 +28,16 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
     def discard(self, map_: Callable[[TB], Either[TA, TB]]) -> Either[TA, TB]:
         return self.bind(map_).chain(self)
 
-    def either(self, map_left: Callable[[TA], TC], map_right: Callable[[TB], TC]) -> TC:
-        return either(map_left, map_right, self)
+    def either(
+        self, map_left_: Callable[[TA], TC], map_right_: Callable[[TB], TC]
+    ) -> TC:
+        return either(map_left_, map_right_, self)
 
     def fmap(self, map_: Callable[[TB], TC]) -> Either[TA, TC]:
         return fmap(self, map_)
+
+    def map_left(self, map_: Callable[[TA], TC]) -> Either[TC, TB]:
+        return map_left(self, map_)
 
     def if_left(self, fallback: TB) -> TB:
         return fallback if self.is_left() else cast(TB, self.value)
@@ -95,17 +100,21 @@ def chain(em0: Either[TC, TA], em1: Either[TC, TB]) -> Either[TC, TB]:
 
 
 def either(
-    map_left: Callable[[TA], TC], map_right: Callable[[TB], TC], em0: Either[TA, TB]
+    map_left_: Callable[[TA], TC], map_right_: Callable[[TB], TC], em0: Either[TA, TB]
 ) -> TC:
     return (
-        map_left(cast(TA, em0.value))
+        map_left_(cast(TA, em0.value))
         if is_left(em0)
-        else map_right(cast(TB, em0.value))
+        else map_right_(cast(TB, em0.value))
     )
 
 
 def fmap(em0: Either[TC, TA], map_: Callable[[TA], TB]) -> Either[TC, TB]:
     return bind(em0, lambda m0: pure(map_(m0)))
+
+
+def map_left(em0: Either[TA, TB], map_: Callable[[TA], TC]) -> Either[TC, TB]:
+    return either(lambda e: left(map_(e)), right, em0)
 
 
 def if_left(em0: Either[TA, TB]) -> bool:

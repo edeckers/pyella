@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-INSTALL_STAMP_PATH=".install.stamp"
-POETRY_ENV_PATH="${HOME}/.poetry/env"
-
 function try_source_env () {
-  if [ -f ${POETRY_ENV_PATH} ]; then
-    source ${POETRY_ENV_PATH}
+  if [ -f ${POETRY_HOME} ]; then
+    export PATH="${POETRY_HOME}:${PATH}"
   fi
 }
 
@@ -23,5 +20,3 @@ function p () {
   assert_poetry_exists
   `poetry_path` ${@}
 }
-
-try_source_env

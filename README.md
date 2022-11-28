@@ -9,7 +9,7 @@ This library brings common monads such as `Maybe` and `Either` to your Python pr
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.7+
 
 ## Installation
 

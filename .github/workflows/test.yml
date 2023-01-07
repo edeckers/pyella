@@ -24,7 +24,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
       - run: make test
-      - uses: EnricoMi/publish-unit-test-result-action@v1
+      - uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: src/reports/**/junit*.xml

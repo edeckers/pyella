@@ -155,3 +155,34 @@ class TestEither(unittest.TestCase):
             # pylint: disable=line-too-long
             "Calling `lefts` on a list of Eithers should return a list of their unwrapped Left values",
         )
+
+    def test_replace_returns_expected_results(self):
+        # arrange
+        some_value = random_str()
+        some_value_2 = random_int()
+
+        some_left_value = random_int()
+
+        some_right = Either.pure(some_value)
+        some_left = left(some_left_value)
+
+        # act
+        right_result = some_right.replace(some_value_2)
+        left_result = some_left.replace(some_value_2)
+
+        # assert
+        self.assertIsInstance(
+            left_result,
+            Left,
+            "Calling `replace` on Left should return unalterted Left value",
+        )
+        self.assertEqual(
+            some_left_value,
+            left_result.if_right(-1),
+            "Calling `replace` on Left should return unalterted Left value",
+        )
+        self.assertEqual(
+            some_value_2,
+            right_result.if_left(-1),
+            "Calling `replace` on Right should successfully return Right with new value",
+        )

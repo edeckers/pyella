@@ -227,3 +227,26 @@ class TestMaybe(unittest.TestCase):
             some_just.from_maybe(-1),
             "Calling `from_maybe` on Just returns its value",
         )
+
+    def test_replace_returns_expected_results(self):
+        # arrange
+        some_value = random_str()
+        some_value_2 = random_int()
+
+        some_just = Maybe.pure(some_value)
+
+        # act
+        just_result = some_just.replace(some_value_2)
+        nothing_result = nothing.replace(some_value_2)
+
+        # assert
+        self.assertIsInstance(
+            nothing_result,
+            Nothing,
+            "Calling `replace` on Nothing should return Nothing",
+        )
+        self.assertEqual(
+            some_value_2,
+            just_result.maybe(-1, identity),
+            "Calling `replace` on Just should successfully return Just with new value",
+        )

@@ -9,6 +9,7 @@ from argparse import ArgumentTypeError
 from typing import Callable, Generic, Iterable, List, Optional, TypeVar, Union, cast
 
 from pyella.maybe import Maybe, nothing
+from pyella.shared import _const
 
 TA = TypeVar("TA")
 TB = TypeVar("TB")
@@ -38,6 +39,9 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
 
     def map_left(self, map_: Callable[[TA], TC]) -> Either[TC, TB]:
         return map_left(self, map_)
+
+    def replace(self, value: TC) -> Either[TA, TC]:
+        return replace(self, value)
 
     def if_left(self, fallback: TB) -> TB:
         return fallback if self.is_left() else cast(TB, self.value)
@@ -135,6 +139,10 @@ def left(value: TA) -> Either[TA, TB]:
 
 def lefts(eithers: Iterable[Either[TA, TB]]) -> List[TA]:
     return list(map(lambda either: cast(TA, either.value), filter(is_left, eithers)))
+
+
+def replace(self, value: TC) -> Either[TA, TC]:
+    return fmap(self, _const(value))
 
 
 def rights(eithers: Iterable[Either[TA, TB]]) -> List[TB]:

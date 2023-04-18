@@ -11,4 +11,4 @@ disable=
 
 [pre-commit-hook]
 command=custom_pylint
-limit=10.0
+limit=10

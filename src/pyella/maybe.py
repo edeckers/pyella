@@ -8,6 +8,8 @@ from __future__ import annotations
 from argparse import ArgumentTypeError
 from typing import Callable, Generic, TypeVar
 
+from pyella.shared import _const
+
 TA = TypeVar("TA")
 TB = TypeVar("TB")
 
@@ -30,9 +32,16 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
     def maybe(self: Maybe[TA], fallback: TB, map_: Callable[[TA], TB]) -> TB:
         return maybe(fallback, map_, self)
 
+    def replace(self, value: TB) -> Maybe[TB]:
+        return replace(self, value)
+
     @staticmethod
     def of(value: TA):  # pylint: disable=invalid-name
-        return of(value)
+        return Maybe.pure(value)
+
+    @staticmethod
+    def pure(value: TA):
+        return pure(value)
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, Maybe):
@@ -91,6 +100,10 @@ def is_nothing(em0: Maybe[TA]) -> bool:
 
 def maybe(fallback: TB, map_: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
     return fallback if is_nothing(em0) else map_(em0.value)
+
+
+def replace(self, value: TB) -> Maybe[TB]:
+    return fmap(self, _const(value))
 
 
 def of(value: TA):  # pylint: disable=invalid-name

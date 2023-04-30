@@ -38,7 +38,7 @@ class TestMaybe(unittest.TestCase):
         just_match_1 = Just(value_match)
         just_diff = Just(value_diff)
 
-        nothing_1 = Nothing()
+        nothing_1: Nothing = Nothing()
 
         # act
         # assert
@@ -117,7 +117,7 @@ class TestMaybe(unittest.TestCase):
         # arrange
         # act
         # https://docs.python.org/3/library/stdtypes.html#truth-value-testing
-        results = list(map(of, [0, 0.0, [], (), {}, "", False]))
+        results = list(map(Maybe.of, [0, 0.0, [], (), {}, "", False]))
 
         # assert
         self.assertTrue(

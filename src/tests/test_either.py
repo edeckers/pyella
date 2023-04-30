@@ -7,7 +7,7 @@ import math
 import unittest
 from argparse import ArgumentTypeError
 from random import sample
-from typing import List
+from typing import Callable, List
 
 import pytest
 
@@ -91,12 +91,22 @@ class TestEither(unittest.TestCase):
 
     def test_creation_of_either_with_right_returns_expected_results(self):
         # arrange
+        some_random_value = random_int()
+
+        right_initializers: List[Callable[[int], Either[str, int]]] = [
+            Right,
+            right,
+            pure,
+        ]
+
         # act
-        some_random_value = random_str()
-        results = list(map(lambda fn: fn(some_random_value), [Right, right, pure]))
-        right_class, right_fn, right_pure = results
+        results: List[Either[str, int]] = list(
+            map(lambda fn: fn(some_random_value), right_initializers)
+        )
 
         # assert
+        right_class, right_fn, right_pure = results
+
         self.assertEqual(
             right_class,
             right_fn,
@@ -114,11 +124,18 @@ class TestEither(unittest.TestCase):
 
     def test_creation_of_either_with_left_returns_expected_results(self):
         # arrange
+        some_random_left_value = random_str()
+
+        left_initializers: List[Callable[[str], Either[str, int]]] = [Left, left]
+
         # act
-        results = list(map(lambda fn: fn(None), [Left, left]))
-        left_class_of, left_fn_of = results
+        results: List[Either[str, int]] = list(
+            map(lambda fn: fn(some_random_left_value), left_initializers)
+        )
 
         # assert
+        left_class_of, left_fn_of = results
+
         self.assertEqual(
             left_class_of,
             left_fn_of,
@@ -136,8 +153,8 @@ class TestEither(unittest.TestCase):
 
         some_left_value = random_str()
 
-        some_right = pure(some_value)
-        some_left = left(some_left_value)
+        some_right: Either[str, int] = pure(some_value)
+        some_left: Either[str, int] = left(some_left_value)
 
         # act
         right_result = some_right.fmap(_square)
@@ -167,8 +184,8 @@ class TestEither(unittest.TestCase):
         some_left_value = random_int()
         some_value_sq = _square(some_left_value)
 
-        some_right = pure(some_value)
-        some_left = left(some_left_value)
+        some_right: Either[int, str] = pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
 
         # act
         right_result = some_right.map_left(_square)
@@ -195,7 +212,7 @@ class TestEither(unittest.TestCase):
         # arrange
         some_value = random_int()
 
-        some_right = pure(some_value)
+        some_right: Either[str, int] = pure(some_value)
 
         either_right = _m_square(some_value)
         either_left = _m_fail(some_value)
@@ -240,8 +257,8 @@ class TestEither(unittest.TestCase):
 
         left_values = [random_str(), random_str()]
 
-        some_rights: List[Right[str, int]] = list(map(right, right_values))
-        some_lefts: List[Left[str, int]] = list(map(left, left_values))
+        some_rights: List[Either[str, int]] = list(map(right, right_values))  # type: ignore
+        some_lefts: List[Either[str, int]] = list(map(left, left_values))  # type: ignore
 
         rights_and_lefts: List[Either[str, int]] = some_rights + some_lefts
 
@@ -272,8 +289,8 @@ class TestEither(unittest.TestCase):
 
         some_left_value = random_int()
 
-        some_right = Either.pure(some_value)
-        some_left = left(some_left_value)
+        some_right: Either[int, str] = Either.pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
 
         # act
         right_result = some_right.replace(some_value_2)

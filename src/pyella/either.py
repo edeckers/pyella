@@ -11,10 +11,10 @@ from typing import Callable, Generic, Iterable, List, Optional, TypeVar, Union, 
 from pyella.maybe import Maybe, nothing
 from pyella.shared import _const
 
-TA = TypeVar("TA")
-TB = TypeVar("TB")
-TC = TypeVar("TC")
-TD = TypeVar("TD")
+TA = TypeVar("TA")  # pylint: disable=invalid-name
+TB = TypeVar("TB")  # pylint: disable=invalid-name
+TC = TypeVar("TC")  # pylint: disable=invalid-name
+TD = TypeVar("TD")  # pylint: disable=invalid-name
 
 
 class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
@@ -140,7 +140,7 @@ def is_right(em0: Either[TA, TB]) -> bool:
     return not is_left(em0)
 
 
-def left(value: TA) -> Either[TA, TB]:
+def left(value: TA) -> Left[TA, TB]:
     return Left(value)
 
 
@@ -156,8 +156,8 @@ def rights(eithers: Iterable[Either[TA, TB]]) -> List[TB]:
     return list(map(lambda either: cast(TB, either.value), filter(is_right, eithers)))
 
 
-def right(value: TB) -> Either[TA, TB]:
-    return Right(value)
+def right(value: TB) -> Right[TA, TB]:
+    return pure(value)
 
 
 def to_maybe(

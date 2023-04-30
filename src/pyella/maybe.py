@@ -6,12 +6,12 @@
 from __future__ import annotations
 
 from argparse import ArgumentTypeError
-from typing import Callable, Generic, TypeVar
+from typing import Callable, Generic, Optional, TypeVar
 
-from pyella.shared import _const
+from pyella.shared import _const, _identity
 
-TA = TypeVar("TA")
-TB = TypeVar("TB")
+TA = TypeVar("TA")  # pylint: disable=invalid-name
+TB = TypeVar("TB")  # pylint: disable=invalid-name
 
 
 class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
@@ -34,6 +34,9 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
 
     def replace(self, value: TB) -> Maybe[TB]:
         return replace(self, value)
+
+    def to_optional(self) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+        return to_optional(self)
 
     @staticmethod
     def of(value: TA):  # pylint: disable=invalid-name
@@ -68,7 +71,7 @@ class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
         return "Nothing"
 
 
-nothing: Maybe = Nothing()
+nothing: Nothing = Nothing()
 
 
 def __identity(value):
@@ -87,7 +90,7 @@ def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
 
 
 def fmap(em0: Maybe[TA], map_: Callable[[TA], TB]) -> Maybe[TB]:
-    return bind(em0, lambda m0: pure(map_(m0)))
+    return bind(em0, lambda m0: Just(map_(m0)))
 
 
 def from_maybe(fallback: TB, em0: Maybe[TA]) -> TB:
@@ -106,7 +109,13 @@ def replace(self, value: TB) -> Maybe[TB]:
     return fmap(self, _const(value))
 
 
-def of(value: TA):  # pylint: disable=invalid-name
+def to_optional(
+    em0: Maybe[TA],
+) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+    return maybe(None, _identity, em0)
+
+
+def of(value: TA) -> Maybe[TA]:  # pylint: disable=invalid-name
     return nothing if value is None else Just(value)
 
 

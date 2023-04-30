@@ -1,16 +1,10 @@
 from random import randint, sample
-from typing import Any, List, TypeVar
+from typing import Any, List
 from uuid import uuid4
-
-TA = TypeVar("TA")
 
 
 def is_list_instance_of(items: List[Any], clazz: type) -> bool:
     return len(items) == len(list(filter(lambda item: isinstance(item, clazz), items)))
-
-
-def identity(value: TA) -> TA:
-    return value
 
 
 def unique_ints(floor: int = 0, ceil: int = 10, sample_size: int = 10) -> List[int]:

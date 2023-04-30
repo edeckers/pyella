@@ -44,16 +44,19 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
         return replace(self, value)
 
     def if_left(self, fallback: TB) -> TB:
-        return fallback if self.is_left() else cast(TB, self.value)
+        return if_left(self, fallback)
 
     def if_right(self, fallback: TA) -> TA:
-        return fallback if self.is_right() else cast(TA, self.value)
+        return if_right(self, fallback)
 
     def is_left(self) -> bool:
         return is_left(self)
 
     def is_right(self) -> bool:
         return is_right(self)
+
+    def to_maybe(self) -> Maybe[TB]:
+        return to_maybe(self)
 
     def to_optional(self) -> Optional[TB]:  # pylint: disable=unsubscriptable-object
         return to_optional(self)
@@ -121,8 +124,12 @@ def map_left(em0: Either[TA, TB], map_: Callable[[TA], TC]) -> Either[TC, TB]:
     return either(lambda e: left(map_(e)), right, em0)
 
 
-def if_left(em0: Either[TA, TB]) -> bool:
-    return isinstance(em0, Left)
+def if_left(em0: Either[TA, TB], fallback: TB) -> TB:
+    return fallback if em0.is_left() else cast(TB, em0.value)
+
+
+def if_right(em0: Either[TA, TB], fallback: TA) -> TA:
+    return fallback if em0.is_right() else cast(TA, em0.value)
 
 
 def is_left(em0: Either[TA, TB]) -> bool:
@@ -153,16 +160,16 @@ def right(value: TB) -> Either[TA, TB]:
     return Right(value)
 
 
-def to_optional(
-    em0: Either[TA, TB]
-) -> Optional[TB]:  # pylint: disable=unsubscriptable-object
-    return either(lambda _: None, lambda v: cast(TB, v), em0)
-
-
 def to_maybe(
     em0: Either[TA, TB]
 ) -> Maybe[TB]:  # pylint: disable=unsubscriptable-object
     return either(lambda _: nothing, lambda v: Maybe.of(cast(TB, v)), em0)
+
+
+def to_optional(
+    em0: Either[TA, TB]
+) -> Optional[TB]:  # pylint: disable=unsubscriptable-object
+    return to_maybe(em0).to_optional()
 
 
 pure = Right  # pylint: disable=invalid-name

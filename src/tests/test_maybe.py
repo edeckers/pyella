@@ -5,15 +5,13 @@
 
 import math
 import unittest
+from argparse import ArgumentTypeError
+
+import pytest
 
 from pyella.maybe import Just, Maybe, Nothing, maybe, nothing, of, pure
-from tests.fixtures import (
-    identity,
-    is_list_instance_of,
-    random_int,
-    random_str,
-    unique_ints,
-)
+from pyella.shared import _identity
+from tests.fixtures import is_list_instance_of, random_int, random_str, unique_ints
 
 
 def _square(value: int) -> int:
@@ -21,18 +19,20 @@ def _square(value: int) -> int:
 
 
 def _m_square(value: int) -> Just[int]:
-    return Just(_square(value))
+    return Maybe.pure(value).fmap(_square)
 
 
 # pylint: disable=unused-argument
 def _m_fail(value: int) -> Maybe[int]:
-    return Nothing()
+    return nothing
 
 
 class TestMaybe(unittest.TestCase):
     def test_maybe_objects_compare_correctly(self):
         # arrange
         value_match, value_diff = unique_ints(sample_size=2)
+
+        some_random_int = random_int()
 
         just_match_0 = Just(value_match)
         just_match_1 = Just(value_match)
@@ -55,6 +55,18 @@ class TestMaybe(unittest.TestCase):
         )
         self.assertNotEqual(nothing, just_match_0, "Nothing should never match a Just")
         self.assertEqual(nothing, nothing_1, "Nothing always matches Nothing")
+        self.assertNotEqual(
+            some_random_int,
+            Maybe.pure(some_random_int),
+            # pylint: disable=line-too-long
+            "Comparison between Just and non-Maybe should always return False",
+        )
+        self.assertNotEqual(
+            some_random_int,
+            nothing,
+            # pylint: disable=line-too-long
+            "Comparison between Nothing and non-Maybe should always return False",
+        )
 
     def test_creation_of_maybe_with_value_returns_just(self):
         # arrange
@@ -125,7 +137,7 @@ class TestMaybe(unittest.TestCase):
         # assert
         self.assertEqual(
             some_value_sq,
-            maybe(-1, identity, just_result),
+            maybe(-1, _identity, just_result),
             "Calling `fmap` on Just should return Just with the mapping applied to its value",
         )
         self.assertEqual(
@@ -147,6 +159,13 @@ class TestMaybe(unittest.TestCase):
         just_success_result = some_just.bind(_m_square)
         just_fail_result = some_just.bind(_m_fail)
         nothing_result = nothing.bind(_m_square)
+
+        with pytest.raises(ArgumentTypeError) as invalid_method_error:
+
+            def some_function_not_returning_either(value):
+                return value
+
+            some_just.bind(some_function_not_returning_either)
 
         # assert
         self.assertIsInstance(
@@ -174,6 +193,11 @@ class TestMaybe(unittest.TestCase):
             nothing_result,
             "Calling `bind` on Nothing should successfully return Nothing",
         )
+        self.assertTrue(
+            invalid_method_error.errisinstance(ArgumentTypeError),
+            # pylint: disable=line-too-long
+            "Calling `bind` with function that doesn't return Maybe should throw an ArgumentTypeError",
+        )
 
     def test_is_nothing_returns_expected_results(self):
         # arrange
@@ -200,12 +224,12 @@ class TestMaybe(unittest.TestCase):
         # assert
         self.assertEqual(
             -1,
-            nothing.maybe(-1, identity),
+            nothing.maybe(-1, _identity),
             "Calling `maybe` with id-function on Nothing returns fallback value",
         )
         self.assertEqual(
             some_value,
-            some_just.maybe(-1, identity),
+            some_just.maybe(-1, _identity),
             "Calling `maybe` with id-function on Just returns its value",
         )
 
@@ -247,6 +271,48 @@ class TestMaybe(unittest.TestCase):
         )
         self.assertEqual(
             some_value_2,
-            just_result.maybe(-1, identity),
+            just_result.maybe(-1, _identity),
             "Calling `replace` on Just should successfully return Just with new value",
+        )
+
+    def test_to_optional_returns_expected_results(self):
+        # arrange
+        some_value = random_int()
+
+        some_just = Maybe.pure(some_value)
+
+        # act
+        just_result = some_just.to_optional()
+        nothing_result = nothing.to_optional()
+
+        # assert
+        self.assertIsNone(
+            nothing_result,
+            "Calling `to_optional` on Nothing should return None",
+        )
+        self.assertEqual(
+            some_value,
+            just_result,
+            "Calling `to_optional` on Just should successfully return its raw value",
+        )
+
+    def test_to_str(self):
+        # arrange
+        some_value = random_int()
+
+        some_just = Maybe.pure(some_value)
+
+        # act
+        just_result = str(some_just)
+        nothing_result = str(nothing)
+
+        # assert
+        self.assertEqual(
+            "Nothing",
+            nothing_result,
+            "Stringified Nothing should always return 'Nothing'",
+        )
+        self.assertTrue(
+            str(some_value) in just_result,
+            "Stringified Just should contain its value",
         )

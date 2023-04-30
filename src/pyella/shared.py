@@ -6,3 +6,7 @@ TB = TypeVar("TB")
 
 def _const(a: TA) -> Callable[[TB], TA]:
     return lambda _: a
+
+
+def _identity(value: TA) -> TA:
+    return value

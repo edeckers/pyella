@@ -214,6 +214,50 @@ class TestMaybe(unittest.TestCase):
             "Calling `is_nothing` on Just returns False",
         )
 
+    def test_chain_returns_expected_results(self):
+        # arrange
+        some_value = random_int()
+        some_value_2 = random_int()
+
+        some_just = Maybe.pure(some_value)
+        some_just_2 = Maybe.pure(some_value_2)
+
+        # act
+        just_result = some_just.chain(some_just_2)
+        nothing_result = nothing.chain(some_just_2)
+
+        # assert
+        self.assertEqual(
+            some_just_2,
+            just_result,
+            "Chaining Just with Just should return the latter Just",
+        )
+        self.assertEqual(
+            nothing,
+            nothing_result,
+            "Chaining Nothing with Right should return Nothing",
+        )
+
+    def test_discard_returns_expected_results(self):
+        # arrange
+        some_right: Maybe[int] = Maybe.pure(random_int())
+
+        # act
+        just_result = some_right.discard(_m_square)
+        nothing_result = nothing.discard(_m_square)
+
+        # assert
+        self.assertEqual(
+            some_right,
+            just_result,
+            "Calling `discard` on Just will return the same Just",
+        )
+        self.assertEqual(
+            nothing,
+            nothing_result,
+            "Calling `discard` on Nothing will return Nothing",
+        )
+
     def test_maybe_returns_expected_results(self):
         # arrange
         some_value = random_int()

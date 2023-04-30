@@ -1,10 +1,9 @@
-from typing import Callable, TypeVar
+from typing import Any, Callable, TypeVar
 
 TA = TypeVar("TA")  # pylint: disable=invalid-name
-TB = TypeVar("TB")  # pylint: disable=invalid-name
 
 
-def _const(value: TA) -> Callable[[TB], TA]:
+def _const(value: TA) -> Callable[[Any], TA]:
     return lambda _: value
 
 

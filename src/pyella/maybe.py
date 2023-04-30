@@ -18,32 +18,59 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
     value: TA
 
     def bind(self, map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+        """
+        Alias for bind(self, map_)
+        """
         return bind(self, map_)
 
     def fmap(self, map_: Callable[[TA], TB]) -> Maybe[TB]:
+        """
+        Alias for fmap(self, map_)
+        """
         return fmap(self, map_)
 
-    def from_maybe(self: Maybe[TA], fallback: TB) -> TB:
+    def from_maybe(self, fallback: TA) -> TA:
+        """
+        Alias for from_maybe(fallback, self)
+        """
         return from_maybe(fallback, self)
 
     def is_nothing(self) -> bool:
+        """
+        Alias for is_nothing(self)
+        """
         return is_nothing(self)
 
     def maybe(self: Maybe[TA], fallback: TB, map_: Callable[[TA], TB]) -> TB:
+        """
+        Alias for maybe(fallback, map_, self)
+        """
         return maybe(fallback, map_, self)
 
     def replace(self, value: TB) -> Maybe[TB]:
+        """
+        Alias for replace(self, value)
+        """
         return replace(self, value)
 
     def to_optional(self) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+        """
+        Alias for to_optional(self)
+        """
         return to_optional(self)
 
     @staticmethod
     def of(value: TA):  # pylint: disable=invalid-name
-        return Maybe.pure(value)
+        """
+        Alias for of(value)
+        """
+        return of(value)
 
     @staticmethod
     def pure(value: TA):
+        """
+        Alias for pure(value)
+        """
         return pure(value)
 
     def __eq__(self, __o: object) -> bool:
@@ -74,11 +101,10 @@ class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
 nothing: Nothing = Nothing()
 
 
-def __identity(value):
-    return value
-
-
 def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+    """
+    Map the value of a Just to a new Maybe, i.e. a new Just or Nothing
+    """
     if is_nothing(em0):
         return nothing
 
@@ -90,33 +116,66 @@ def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
 
 
 def fmap(em0: Maybe[TA], map_: Callable[[TA], TB]) -> Maybe[TB]:
+    """
+    Map a function over the value of a Maybe when it's Just, otherwise return Nothing
+    """
     return bind(em0, lambda m0: Just(map_(m0)))
 
 
-def from_maybe(fallback: TB, em0: Maybe[TA]) -> TB:
-    return maybe(fallback, __identity, em0)
+def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
+    """
+    Return the value of a Maybe when it's Just, otherwise return a fallback value
+    """
+    return maybe(fallback, _identity, em0)
 
 
 def is_nothing(em0: Maybe[TA]) -> bool:
+    """
+    Is the gievn Maybe Nothing?
+    """
     return isinstance(em0, Nothing)
 
 
 def maybe(fallback: TB, map_: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
+    """
+    Map and return the given Maybe when it's Just, otherwise return a fallback value
+    """
     return fallback if is_nothing(em0) else map_(em0.value)
 
 
-def replace(self, value: TB) -> Maybe[TB]:
-    return fmap(self, _const(value))
+def replace(em0: Maybe[TA], value: TB) -> Maybe[TB]:
+    """
+    Replace the value of a Maybe with a new value
+
+    Returns Nothing if the Maybe is Nothing, otherwise a Just with provided value
+    """
+    to_value: Callable[[TA], TB] = _const(value)
+
+    return fmap(em0, to_value)
 
 
 def to_optional(
     em0: Maybe[TA],
 ) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+    """
+    Convert a Maybe to an Optional
+
+    Returns None if the Maybe is Nothing, otherwise its value
+    """
     return maybe(None, _identity, em0)
 
 
 def of(value: TA) -> Maybe[TA]:  # pylint: disable=invalid-name
+    """
+    Alias for pure(value)
+    """
+    return pure(value)
+
+
+def pure(value: TA):
+    """
+    Create a Maybe from a value
+
+    Returns Nothing if the value is None, otherwise Just(value)
+    """
     return nothing if value is None else Just(value)
-
-
-pure = of  # pylint: disable=invalid-name

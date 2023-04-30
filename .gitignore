@@ -1,6 +1,9 @@
 .install.stamp
 .vscode
 
+docs/_*
+docs/generated
+
 bin
 config.yml
 src/reports

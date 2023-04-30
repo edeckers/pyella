@@ -5,9 +5,9 @@
 
 
 """
-The `maybe` module Provides a way to handle values that may or 
+Maybe - Provides a way to handle values that may or 
 may not be present. Its implementation was closely inspired by
-the Haskell `Data.Maybe` type.
+the Haskell ``Data.Maybe`` type.
 
 More information on the Haskell `Data.Maybe` type can be found here:
 https://hackage.haskell.org/package/base/docs/Data-Maybe.html
@@ -27,71 +27,71 @@ TB = TypeVar("TB")  # pylint: disable=invalid-name
 class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
     value: TA
 
-    def bind(self, map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+    def bind(self, apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
         """
-        Alias for bind(self, map_)
+        Alias for :py:func:`bind(self, apply) <bind>`
         """
-        return bind(self, map_)
+        return bind(self, apply)
 
     def chain(self, em1: Maybe[TB]) -> Maybe[TB]:
         """
-        Alias for chain(self, em1)
+        Alias for :py:func:`chain(self, em1) <chain>`
         """
         return chain(self, em1)
 
-    def discard(self, map_: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+    def discard(self, apply: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
         """
-        Alias for discard(self, map_)
+        Alias for :py:func:`discard(self, apply) <discard>`
         """
-        return discard(self, map_)
+        return discard(self, apply)
 
-    def fmap(self, map_: Callable[[TA], TB]) -> Maybe[TB]:
+    def fmap(self, apply: Callable[[TA], TB]) -> Maybe[TB]:
         """
-        Alias for fmap(self, map_)
+        Alias for :py:func:`fmap(self, apply) <fmap>`
         """
-        return fmap(self, map_)
+        return fmap(self, apply)
 
     def from_maybe(self, fallback: TA) -> TA:
         """
-        Alias for from_maybe(fallback, self)
+        Alias for :py:func:`from_maybe(fallback, self) <from_maybe>`
         """
         return from_maybe(fallback, self)
 
     def is_nothing(self) -> bool:
         """
-        Alias for is_nothing(self)
+        Alias for :py:func:`is_nothing(self) <is_nothing>`
         """
         return is_nothing(self)
 
-    def maybe(self: Maybe[TA], fallback: TB, map_: Callable[[TA], TB]) -> TB:
+    def maybe(self: Maybe[TA], fallback: TB, apply: Callable[[TA], TB]) -> TB:
         """
-        Alias for maybe(fallback, map_, self)
+        Alias for :py:func:`maybe(fallback, apply, self) <maybe>`
         """
-        return maybe(fallback, map_, self)
+        return maybe(fallback, apply, self)
 
     def replace(self, value: TB) -> Maybe[TB]:
         """
-        Alias for replace(self, value)
+        Alias for :py:func:`replace(self, value) <replace>`
         """
         return replace(self, value)
 
     def to_optional(self) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
         """
-        Alias for to_optional(self)
+        Alias for :py:func:`to_optional(self) <to_optional>`
         """
         return to_optional(self)
 
     @staticmethod
     def of(value: TA):  # pylint: disable=invalid-name
         """
-        Alias for of(value)
+        Alias for :py:func:`of(value) <of>`
         """
         return of(value)
 
     @staticmethod
     def pure(value: TA):
         """
-        Alias for pure(value)
+        Alias for :py:func:`pure(value) <pure>`
         """
         return pure(value)
 
@@ -123,16 +123,18 @@ class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
 nothing: Nothing = Nothing()
 
 
-def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+def bind(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
     """
-    Haskell: `>>=`
+    Map the value of a :py:class:`Just[TA] <Just>` to a new :py:class:`Maybe[TB] <Maybe>`
 
-    Map the value of a Just to a new Maybe, i.e. a new Just or Nothing
+    :raises ArgumentTypeError: If the result of the apply function is not a :py:class:`Maybe`
+
+    .. note:: Haskell: `>>= <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:-62--62--61->`_
     """
     if is_nothing(em0):
         return nothing
 
-    result = map_(em0.value)
+    result = apply(em0.value)
     if not isinstance(result, Maybe):
         raise ArgumentTypeError("Bind should return Maybe")
 
@@ -141,74 +143,76 @@ def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
 
 def chain(em0: Maybe[TA], em1: Maybe[TB]) -> Maybe[TB]:
     """
-    Haskell: `>>`
+    Discard the current value of a `:py:class:Just[TA] <Just>` and replace it with the given :py:class:`Maybe[TA] <Maybe>`
 
-    Discard the current value of a Just and replace it with the given Maybe
+    .. note:: Haskell: `>> <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:-62--62->`_
     """
     return bind(em0, lambda _: em1)
 
 
-def discard(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+def discard(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
     """
-    Apply the given function to the value of a Just and discard the result
+    Apply the given function to the value of a :py:class:`Just[TA] <Just>` and discard the result
     """
-    return em0.bind(map_).chain(em0)
+    return em0.bind(apply).chain(em0)
 
 
-def fmap(em0: Maybe[TA], map_: Callable[[TA], TB]) -> Maybe[TB]:
+def fmap(em0: Maybe[TA], apply: Callable[[TA], TB]) -> Maybe[TB]:
     """
-    Haskell: `fmap`
+    Map a function over the value of a :py:class:`Maybe[TA] <Maybe>` when it's :py:class:`Just[TA] <Just>`, otherwise return :py:class:`Nothing`
 
-    Map a function over the value of a Maybe when it's Just, otherwise return Nothing
+    .. note:: Haskell: `fmap <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:fmap>`_
     """
-    return bind(em0, lambda m0: Just(map_(m0)))
+    return bind(em0, lambda m0: Just(apply(m0)))
 
 
 def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
     """
-    Haskell: `fromMaybe`
-
     Return the value of a Maybe when it's Just, otherwise return a fallback value
+
+    .. note:: Haskell: `fromMaybe <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:fromMaybe>`_
     """
     return maybe(fallback, _identity, em0)
 
 
 def is_nothing(em0: Maybe[TA]) -> bool:
     """
-    Haskell: `isNothing`
-
     Is the given Maybe Nothing?
+
+    .. note:: Haskell: `isNothing <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:isNothing>`_
     """
     return isinstance(em0, Nothing)
 
 
-def maybe(fallback: TB, map_: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
+def maybe(fallback: TB, apply: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
     """
-    Haskell: `maybe`
+    Map and return the value of the given :py:class:`Maybe[TA]` when it's :py:class:`Just[TA] <Just>`, otherwise return a fallback value
 
-    Map and return the given Maybe when it's Just, otherwise return a fallback value
+    :return: Mapped :py:class:`Just` value or fallback when :py:class:`Nothing`
+
+    .. note:: Haskell: `pure <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:maybe>`_
     """
-    return fallback if is_nothing(em0) else map_(em0.value)
+    return fallback if is_nothing(em0) else apply(em0.value)
 
 
 def replace(em0: Maybe[TA], value: TB) -> Maybe[TB]:
     """
-    Haskell: `(<$)`
+    Replace the value of a :py:class:`Maybe` with a new value.
 
-    Replace the value of a Maybe with a new value
+    :return: :py:class:`Nothing` if the :py:class:`Maybe` is :py:class:`Nothing`, otherwise a :py:class:`Just` with provided value
 
-    Returns Nothing if the Maybe is Nothing, otherwise a Just with provided value
+    .. note:: Haskell: `<$ <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:-60--36->`__
     """
     return fmap(em0, _const(value))
 
 
 def pure(value: TA):
     """
-    Haskell: `pure`
+    Create a :py:class:`Maybe[TA] <Maybe>` from a value
 
-    Create a Maybe from a value
+    :return: :py:class:`Nothing` if the value is ``None``, otherwise :py:class:`Just(value) <Just>`
 
-    Returns Nothing if the value is None, otherwise Just(value)
+    .. note:: Haskell: `pure <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:pure>`__
     """
     return nothing if value is None else Just(value)
 
@@ -217,15 +221,16 @@ def to_optional(
     em0: Maybe[TA],
 ) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
     """
-    Convert a Maybe to an Optional
+    Convert a :py:class:`Maybe[TA] <Maybe>` to an
+    `Optional[TA] <https://docs.python.org/3/library/typing.html#typing.Optional>`_
 
-    Returns None if the Maybe is Nothing, otherwise its value
+    :return: ``None`` if the :py:class:`Maybe` is :py:class:`Nothing`, otherwise its value
     """
     return maybe(None, _identity, em0)
 
 
 def of(value: TA) -> Maybe[TA]:  # pylint: disable=invalid-name
     """
-    Alias for pure(value)
+    Alias for :py:func:`pure(value) <bind>`
     """
     return pure(value)

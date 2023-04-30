@@ -3,6 +3,16 @@
 # This source code is licensed under the MPL-2.0 license found in the
 # LICENSE file in the root directory of this source tree.
 
+"""
+Either - Represents values with two possibilities: a value of type
+:py:class:`Either[TA, TB] <Either>` is either :py:class:`Left[TA] <Left>` or 
+:py:class:`Right[TB] <Right>`. Its implementation was closely inspired by the
+Haskell ``Data.Either`` type.
+
+More information on the Haskell ``Data.Either`` type can be found here:
+https://hackage.haskell.org/package/base/docs/Data-Either.html
+"""
+
 from __future__ import annotations
 
 from argparse import ArgumentTypeError
@@ -16,103 +26,94 @@ TB = TypeVar("TB")  # pylint: disable=invalid-name
 TC = TypeVar("TC")  # pylint: disable=invalid-name
 TD = TypeVar("TD")  # pylint: disable=invalid-name
 
-"""
-The Either type represents values with two possibilities: a value of type
-`Either[TA, TB]` is either `Left[TA]` or `Right[TB]`. Its implementation was
-closely inspired by the Haskell `Data.Either` type.
-
-More information on the Haskell `Data.Either` type can be found here:
-https://hackage.haskell.org/package/base/docs/Data-Either.html
-"""
-
 
 class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
     value: Union[TA, TB]  # pylint: disable=unsubscriptable-object
 
-    def bind(self, map_: Callable[[TB], Either[TA, TC]]) -> Either[TA, TC]:
+    def bind(self, apply: Callable[[TB], Either[TA, TC]]) -> Either[TA, TC]:
         """
-        Alias for bind(self, map_)
+        Alias for :py:func:`bind(self, apply) <bind>`
         """
-        return bind(self, map_)
+        return bind(self, apply)
 
     def chain(self, em1: Either[TA, TC]) -> Either[TA, TC]:
         """
-        Alias for chain(self, em1)
+        Alias for :py:func:`chain(self, em1) <chain>`
         """
         return chain(self, em1)
 
-    def discard(self, map_: Callable[[TB], Either[TA, TB]]) -> Either[TA, TB]:
+    def discard(self, apply: Callable[[TB], Either[TA, TB]]) -> Either[TA, TB]:
         """
-        Alias for discard(self, map_)
+        Alias for :py:func:`discard(self, apply) <discard>`
         """
-        return discard(self, map_)
+        return discard(self, apply)
 
     def either(
         self, map_left_: Callable[[TA], TC], map_right_: Callable[[TB], TC]
     ) -> TC:
         """
-        Alias for either(map_left, map_right, self)
+        Alias for :py:func:`either(map_left, map_right, self) <either>`
         """
         return either(map_left_, map_right_, self)
 
-    def fmap(self, map_: Callable[[TB], TC]) -> Either[TA, TC]:
+    def fmap(self, apply: Callable[[TB], TC]) -> Either[TA, TC]:
         """
-        Alias for fmap(self, map_)
+        Alias for :py:func:`fmap(self, apply) <fmap>`
         """
-        return fmap(self, map_)
+        return fmap(self, apply)
 
     def if_left(self, fallback: TB) -> TB:
         """
-        Alias for if_left(self, fallback)
+        Alias for :py:func:`if_left(self, fallback) <if_left>`
         """
         return if_left(self, fallback)
 
     def if_right(self, fallback: TA) -> TA:
         """
-        Alias for if_right(self, fallback)
+        Alias for :py:func:`if_right(self, fallback) <if_right>`
         """
         return if_right(self, fallback)
 
     def is_left(self) -> bool:
         """
-        Alias for is_left(self)
+        Alias for :py:func:`is_left(self) <is_left>`
         """
         return is_left(self)
 
     def is_right(self) -> bool:
         """
-        Alias for is_right(self)
+        Alias for :py:func:`is_right(self) <is_right>`
         """
         return is_right(self)
 
-    def map_left(self, map_: Callable[[TA], TC]) -> Either[TC, TB]:
+    def map_left(self, apply: Callable[[TA], TC]) -> Either[TC, TB]:
         """
-        Alias for map_left(self, map_)
+        Alias for :py:func:`map_left(self, apply) <map_left>`
         """
-        return map_left(self, map_)
+        return map_left(self, apply)
 
     def replace(self, value: TC) -> Either[TA, TC]:
         """
-        Alias for replace(self, value)
+        Alias for :py:func:`replace(self, value) <replace>`
         """
         return replace(self, value)
 
     def to_maybe(self) -> Maybe[TB]:
         """
-        Alias for to_maybe(self)
+        Alias for :py:func:`to_maybe(self) <to_maybe>`
         """
         return to_maybe(self)
 
     def to_optional(self) -> Optional[TB]:  # pylint: disable=unsubscriptable-object
         """
-        Alias for to_optional(self)
+        Alias for :py:func:`to_optional(self) <to_optional>`
         """
         return to_optional(self)
 
     @staticmethod
     def pure(value: TB) -> Either[TA, TB]:  # pylint: disable=invalid-name
         """
-        Alias for pure(self)
+        Alias for :py:func:`pure(self) <pure>`
         """
         return pure(value)
 
@@ -142,47 +143,51 @@ class Right(Either[TA, TB]):  # pylint: disable=too-few-public-methods
         return f"Right({self.value.__str__()})"
 
 
-def bind(em0: Either[TC, TA], map_: Callable[[TA], Either[TC, TB]]) -> Either[TC, TB]:
+def bind(em0: Either[TC, TA], apply: Callable[[TA], Either[TC, TB]]) -> Either[TC, TB]:
     """
-    Haskell: `>>=`
+    Map the value of a :py:class:`Right[TA] <Right>` to a new :py:class:`Either[TC, TB] <Either>`
 
-    Map the value of a Right to a new Either, i.e. a new Right or Left
+    :raises ArgumentTypeError: If the result of the apply function is not a :py:class:`Either`
+
+    :return: A new :py:class:`Right[TB]` or :py:class:`Left[TC]`
+
+    .. note:: Haskell: `>>= <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:-62--62--61->`__
     """
     if is_left(em0):
         return cast(Left[TC, TB], em0)
 
-    result = map_(cast(TA, em0.value))
+    result = apply(cast(TA, em0.value))
     if not isinstance(result, Either):
-        raise ArgumentTypeError("Bind should return Either")
+        raise ArgumentTypeError("Bind should return :py:class:`Either`")
 
     return result
 
 
 def chain(em0: Either[TC, TA], em1: Either[TC, TB]) -> Either[TC, TB]:
     """
-    Haskell: `>>`
+    Discard the current value of a :py:class:`Right[TA] <Right>` and replace it with the given :py:class:`Either[TC, TB] <Either>`
 
-    Discard the current value of a Right and replace it with the given Either
+    .. note:: Haskell: `>> <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:-62--62->`__
     """
     return bind(em0, lambda _: em1)
 
 
 def discard(
-    em0: Either[TC, TA], map_: Callable[[TA], Either[TC, TB]]
+    em0: Either[TC, TA], apply: Callable[[TA], Either[TC, TB]]
 ) -> Either[TC, TA]:
     """
-    Apply the given function to the value of a Right and discard the result
+    Apply the given function to the value of a :py:class:`Right[TA] <Right>` and discard the result
     """
-    return em0.bind(map_).chain(em0)
+    return em0.bind(apply).chain(em0)
 
 
 def replace(self, value: TC) -> Either[TA, TC]:
     """
-    Haskell: `(<$)`
+    Replace the value of an :py:class:`Either` with a new value
 
-    Replace the value of an Either with a new value
+    :return: itself if the :py:class:`Either` is :py:class:`Left`, otherwise a :py:class:`Right[TC] <Right>` with provided value
 
-    Returns itself if the Either is Left, otherwise a Right with provided value
+    .. note:: Haskell: `<$ <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:-60--36->`__
     """
     return fmap(self, _const(value))
 
@@ -191,10 +196,10 @@ def either(
     map_left_: Callable[[TA], TC], map_right_: Callable[[TB], TC], em0: Either[TA, TB]
 ) -> TC:
     """
-    Haskell: `either`
+    Map the value of the given :py:class:`Either` with `map_right_` if its :py:class:`Right` or
+    with `map_left_` when it's :py:class:`Left`.
 
-    Map the value of the given Either with `map_right` if its Right or
-    with `map_left` when it's Left.
+    .. note:: Haskell: `either <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:either>`_
     """
     return (
         map_left_(cast(TA, em0.value))
@@ -203,87 +208,87 @@ def either(
     )
 
 
-def fmap(em0: Either[TC, TA], map_: Callable[[TA], TB]) -> Either[TC, TB]:
+def fmap(em0: Either[TC, TA], apply: Callable[[TA], TB]) -> Either[TC, TB]:
     """
-    Haskell: `fmap`
-
-    Map a function over the value of an Either when it's Right, otherwise return
+    Map a function over the value of an :py:class:`Either` when it's :py:class:`Right[TA] <Right>`, otherwise return
     itself
+
+    .. note:: Haskell: `fmap <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:fmap>`__
     """
-    return bind(em0, lambda m0: pure(map_(m0)))
+    return bind(em0, lambda m0: pure(apply(m0)))
 
 
-def map_left(em0: Either[TA, TB], map_: Callable[[TA], TC]) -> Either[TC, TB]:
+def map_left(em0: Either[TA, TB], apply: Callable[[TA], TC]) -> Either[TC, TB]:
     """
-    Haskell: `fmap`
-
-    Map a function over the value of an Either when it's Left, otherwise return
+    Map a function over the value of an `:py:class:Either` when it's :py:class:`Left`, otherwise return
     itself
+
+    .. note:: Haskell: `first <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:first>`_
     """
-    return either(lambda e: left(map_(e)), right, em0)
+    return either(lambda e: left(apply(e)), right, em0)
 
 
 def if_left(em0: Either[TA, TB], fallback: TB) -> TB:
     """
-    Haskell: `fromRight`
+    Return the contents of a :py:class:`Right[TB] <Right>` or a fallback value if it's :py:class:`Left`
 
-    Return the contents of a Right or a fallback value if it's Left
+    .. note:: Haskell: `fromRight <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:fromRight>`_
     """
     return fallback if em0.is_left() else cast(TB, em0.value)
 
 
 def if_right(em0: Either[TA, TB], fallback: TA) -> TA:
     """
-    Haskell: `fromLeft`
+    Return the contents of a :py:class:`Left` or a fallback value if it's :py:class:`Right`
 
-    Return the contents of a Left or a fallback value if it's Right
+    .. note:: Haskell: `fromLeft <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:fromLeft>`_
     """
     return fallback if em0.is_right() else cast(TA, em0.value)
 
 
 def is_left(em0: Either[TA, TB]) -> bool:
     """
-    Haskell: `isLeft`
+    Is the given :py:class:`Either` a :py:class:`Left`?
 
-    Is the given Either a Left?
+    .. note:: Haskell: `isLeft <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:isLeft>`_
     """
     return isinstance(em0, Left)
 
 
 def is_right(em0: Either[TA, TB]) -> bool:
     """
-    Haskell: `isRight`
+    Is the given :py:class:`Either` a :py:class:`Right`?
 
-    Is the given Either a Right?
+    .. note:: Haskell: `isRight <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:isRight>`_
     """
     return not is_left(em0)
 
 
 def lefts(eithers: Iterable[Either[TA, TB]]) -> List[TA]:
     """
-    Haskell: `lefts`
+    Return a list of all the :py:class:`Left` values in the given list of :py:class:`Eithers <Either>`
 
-    Return a list of all the Left values in the given list of Eithers
+    .. note:: Haskell: `lefts <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:lefts>`_
     """
     return list(map(lambda either: cast(TA, either.value), filter(is_left, eithers)))
 
 
 def rights(eithers: Iterable[Either[TA, TB]]) -> List[TB]:
     """
-    Haskell: `rights`
+    Return a list of all the :py:class:`Right` values in the given list of :py:class:`Eithers <Either>`
 
-    Return a list of all the Right values in the given list of Eithers
+    .. note:: Haskell: `rights <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:rights>`_
     """
     return list(map(lambda either: cast(TB, either.value), filter(is_right, eithers)))
 
 
 def left(value: TA) -> Left[TA, TB]:
-    "Create a Left with the given value"
+    "Create a :py:class:`Left[TA] <Left>` with the given value"
     return Left(value)
 
 
 def right(value: TB) -> Right[TA, TB]:
-    "Alias for pure(value)"
+    "Alias for :py:func:`pure(value) <pure>`"
     return pure(value)
 
 
@@ -291,9 +296,10 @@ def to_maybe(
     em0: Either[TA, TB]
 ) -> Maybe[TB]:  # pylint: disable=unsubscriptable-object
     """
-    Haskell: `toMaybe`
+    Convert an :py:class:`Either[TA, TB] <Either>` to a :py:class:`Maybe[TB] <Maybe>` by
+    mapping :py:class:`Left` to :py:class:`Nothing` and :py:class:`Right` to :py:class:`Just[TB] <Just>`
 
-    Convert an Either to a Maybe by mapping Left to Nothing and Right to Just
+    .. note:: Haskell: `toMaybe <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:toMaybe>`_
     """
     return either(lambda _: nothing, lambda v: Maybe.of(cast(TB, v)), em0)
 
@@ -302,15 +308,20 @@ def to_optional(
     em0: Either[TA, TB]
 ) -> Optional[TB]:  # pylint: disable=unsubscriptable-object
     """
-    Convert an Either to an Optional by mapping Left to None and Right to its value
+    Convert an :py:class:`Either[TA, TB] <Either>` to an
+    `Optional[TB] <https://docs.python.org/3/library/typing.html#typing.Optional>`_
+    by mapping :py:class:`Left[TA] <Left>` to ``None`` and :py:class:`Right[TB] <Right>`
+    to its value
+
+    :return: ``None`` if the :py:class:`Either` is :py:class:`Left`, otherwise its value
     """
     return to_maybe(em0).to_optional()
 
 
 def pure(value: TA):
     """
-    Haskell: `pure`
+    Create a :py:class:`Right[TA] <Right>` from a value
 
-    Create a Right from a value
+    .. note:: Haskell: `pure <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:pure>`__
     """
     return Right(value)

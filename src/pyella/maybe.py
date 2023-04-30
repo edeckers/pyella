@@ -3,6 +3,16 @@
 # This source code is licensed under the MPL-2.0 license found in the
 # LICENSE file in the root directory of this source tree.
 
+
+"""
+The `maybe` module Provides a way to handle values that may or 
+may not be present. Its implementation was closely inspired by
+the Haskell `Data.Maybe` type.
+
+More information on the Haskell `Data.Maybe` type can be found here:
+https://hackage.haskell.org/package/base/docs/Data-Maybe.html
+"""
+
 from __future__ import annotations
 
 from argparse import ArgumentTypeError
@@ -22,6 +32,18 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
         Alias for bind(self, map_)
         """
         return bind(self, map_)
+
+    def chain(self, em1: Maybe[TB]) -> Maybe[TB]:
+        """
+        Alias for chain(self, em1)
+        """
+        return chain(self, em1)
+
+    def discard(self, map_: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+        """
+        Alias for discard(self, map_)
+        """
+        return discard(self, map_)
 
     def fmap(self, map_: Callable[[TA], TB]) -> Maybe[TB]:
         """
@@ -103,6 +125,8 @@ nothing: Nothing = Nothing()
 
 def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
     """
+    Haskell: `>>=`
+
     Map the value of a Just to a new Maybe, i.e. a new Just or Nothing
     """
     if is_nothing(em0):
@@ -115,8 +139,26 @@ def bind(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
     return result
 
 
+def chain(em0: Maybe[TA], em1: Maybe[TB]) -> Maybe[TB]:
+    """
+    Haskell: `>>`
+
+    Discard the current value of a Just and replace it with the given Maybe
+    """
+    return bind(em0, lambda _: em1)
+
+
+def discard(em0: Maybe[TA], map_: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+    """
+    Apply the given function to the value of a Just and discard the result
+    """
+    return em0.bind(map_).chain(em0)
+
+
 def fmap(em0: Maybe[TA], map_: Callable[[TA], TB]) -> Maybe[TB]:
     """
+    Haskell: `fmap`
+
     Map a function over the value of a Maybe when it's Just, otherwise return Nothing
     """
     return bind(em0, lambda m0: Just(map_(m0)))
@@ -124,6 +166,8 @@ def fmap(em0: Maybe[TA], map_: Callable[[TA], TB]) -> Maybe[TB]:
 
 def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
     """
+    Haskell: `fromMaybe`
+
     Return the value of a Maybe when it's Just, otherwise return a fallback value
     """
     return maybe(fallback, _identity, em0)
@@ -131,13 +175,17 @@ def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
 
 def is_nothing(em0: Maybe[TA]) -> bool:
     """
-    Is the gievn Maybe Nothing?
+    Haskell: `isNothing`
+
+    Is the given Maybe Nothing?
     """
     return isinstance(em0, Nothing)
 
 
 def maybe(fallback: TB, map_: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
     """
+    Haskell: `maybe`
+
     Map and return the given Maybe when it's Just, otherwise return a fallback value
     """
     return fallback if is_nothing(em0) else map_(em0.value)
@@ -145,13 +193,24 @@ def maybe(fallback: TB, map_: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
 
 def replace(em0: Maybe[TA], value: TB) -> Maybe[TB]:
     """
+    Haskell: `(<$)`
+
     Replace the value of a Maybe with a new value
 
     Returns Nothing if the Maybe is Nothing, otherwise a Just with provided value
     """
-    to_value: Callable[[TA], TB] = _const(value)
+    return fmap(em0, _const(value))
 
-    return fmap(em0, to_value)
+
+def pure(value: TA):
+    """
+    Haskell: `pure`
+
+    Create a Maybe from a value
+
+    Returns Nothing if the value is None, otherwise Just(value)
+    """
+    return nothing if value is None else Just(value)
 
 
 def to_optional(
@@ -170,12 +229,3 @@ def of(value: TA) -> Maybe[TA]:  # pylint: disable=invalid-name
     Alias for pure(value)
     """
     return pure(value)
-
-
-def pure(value: TA):
-    """
-    Create a Maybe from a value
-
-    Returns Nothing if the value is None, otherwise Just(value)
-    """
-    return nothing if value is None else Just(value)

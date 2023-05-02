@@ -3,13 +3,17 @@
 # This source code is licensed under the MPL-2.0 license found in the
 # LICENSE file in the root directory of this source tree.
 
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
+
 import math
 import unittest
 from argparse import ArgumentTypeError
 from random import sample
 from typing import Callable, List
 
-import pytest
+import pytest  # pylint: disable=import-error
 
 from pyella.either import Either, Left, Right, either, left, lefts, pure, right, rights
 from pyella.maybe import nothing

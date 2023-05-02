@@ -5,11 +5,10 @@
 
 
 """
-Maybe - Provides a way to handle values that may or 
-may not be present. Its implementation was closely inspired by
-the Haskell ``Data.Maybe`` type.
+Maybe - Contains the Maybe type and related functions. Its implementation
+was closely inspired by the Haskell ``Data.Maybe`` type.
 
-More information on the Haskell `Data.Maybe` type can be found here:
+More information on the Haskell ``Data.Maybe`` type can be found here:
 https://hackage.haskell.org/package/base/docs/Data-Maybe.html
 """
 
@@ -25,6 +24,11 @@ TB = TypeVar("TB")  # pylint: disable=invalid-name
 
 
 class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
+    """
+    Provides a way to handle values that may or may not be present: A value of
+    type ``Maybe[A]`` is either ``Nothing`` or ``Just[A]``.
+    """
+
     value: TA
 
     def bind(self, apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
@@ -106,6 +110,10 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
 
 
 class Just(Maybe[TA]):  # pylint: disable=too-few-public-methods
+    """
+    An instance of type ``Just[A]`` contains a value of type ``A``.
+    """
+
     value: TA
 
     def __init__(self, value: TA):
@@ -116,6 +124,10 @@ class Just(Maybe[TA]):  # pylint: disable=too-few-public-methods
 
 
 class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
+    """
+    An instance of type ``Nothing`` contains no value.
+    """
+
     def __str__(self) -> str:
         return "Nothing"
 
@@ -143,7 +155,7 @@ def bind(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
 
 def chain(em0: Maybe[TA], em1: Maybe[TB]) -> Maybe[TB]:
     """
-    Discard the current value of a `:py:class:Just[TA] <Just>` and replace it with the given :py:class:`Maybe[TA] <Maybe>`
+    Discard the current value of a :py:class:`Just[TA] <Just>` and replace it with the given :py:class:`Maybe[TA] <Maybe>`
 
     .. note:: Haskell: `>> <https://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:-62--62->`_
     """

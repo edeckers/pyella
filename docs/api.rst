@@ -1,7 +1,6 @@
 API Reference
 =============
 
-
 Either
 ------
 

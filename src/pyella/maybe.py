@@ -6,7 +6,7 @@
 
 """
 Maybe - Contains the Maybe type and related functions. Its implementation
-was closely inspired by the Haskell ``Data.Maybe`` type.
+was strongly inspired by the Haskell ``Data.Maybe`` type.
 
 More information on the Haskell ``Data.Maybe`` type can be found here:
 https://hackage.haskell.org/package/base/docs/Data-Maybe.html

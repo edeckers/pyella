@@ -5,7 +5,7 @@
 
 """
 Either - Contains the :py:class:`Either[TA, TB] <Either>` type and related
-functions. It was closely inspired by the Haskell ``Data.Either`` module.
+functions. It was strongly inspired by the Haskell ``Data.Either`` module.
 
 More information on the Haskell ``Data.Either`` type can be found here:
 https://hackage.haskell.org/package/base/docs/Data-Either.html

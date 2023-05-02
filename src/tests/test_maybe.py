@@ -3,11 +3,14 @@
 # This source code is licensed under the MPL-2.0 license found in the
 # LICENSE file in the root directory of this source tree.
 
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 import math
 import unittest
 from argparse import ArgumentTypeError
 
-import pytest
+import pytest  # pylint: disable=import-error
 
 from pyella.maybe import Just, Maybe, Nothing, maybe, nothing, of, pure
 from pyella.shared import _identity

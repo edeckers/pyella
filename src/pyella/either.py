@@ -4,10 +4,8 @@
 # LICENSE file in the root directory of this source tree.
 
 """
-Either - Represents values with two possibilities: a value of type
-:py:class:`Either[TA, TB] <Either>` is either :py:class:`Left[TA] <Left>` or 
-:py:class:`Right[TB] <Right>`. Its implementation was closely inspired by the
-Haskell ``Data.Either`` type.
+Either - Contains the :py:class:`Either[TA, TB] <Either>` type and related
+functions. It was strongly inspired by the Haskell ``Data.Either`` module.
 
 More information on the Haskell ``Data.Either`` type can be found here:
 https://hackage.haskell.org/package/base/docs/Data-Either.html
@@ -28,6 +26,12 @@ TD = TypeVar("TD")  # pylint: disable=invalid-name
 
 
 class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
+    """
+    Represents values with two possibilities: a value of type
+    :py:class:`Either[TA, TB] <Either>` is either :py:class:`Left[TA] <Left>` or
+    :py:class:`Right[TB] <Right>`.
+    """
+
     value: Union[TA, TB]  # pylint: disable=unsubscriptable-object
 
     def bind(self, apply: Callable[[TB], Either[TA, TC]]) -> Either[TA, TC]:
@@ -128,6 +132,11 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
 
 
 class Left(Either[TA, TB]):  # pylint: disable=too-few-public-methods
+    """
+    Represents the left side of an :py:class:`Either[TA, TB] <Either>`, often
+    used to represent the failure case
+    """
+
     def __init__(self, value: TA):
         self.value = value
 
@@ -136,6 +145,11 @@ class Left(Either[TA, TB]):  # pylint: disable=too-few-public-methods
 
 
 class Right(Either[TA, TB]):  # pylint: disable=too-few-public-methods
+    """
+    Represents the right side of an :py:class:`Either[TA, TB] <Either>`, often
+    used to represent the success case
+    """
+
     def __init__(self, value: TB):
         self.value = value
 
@@ -220,7 +234,7 @@ def fmap(em0: Either[TC, TA], apply: Callable[[TA], TB]) -> Either[TC, TB]:
 
 def map_left(em0: Either[TA, TB], apply: Callable[[TA], TC]) -> Either[TC, TB]:
     """
-    Map a function over the value of an `:py:class:Either` when it's :py:class:`Left`, otherwise return
+    Map a function over the value of an :py:class:`Either` when it's :py:class:`Left`, otherwise return
     itself
 
     .. note:: Haskell: `first <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:first>`_

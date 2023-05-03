@@ -20,6 +20,10 @@ include = [
     "LICENSE",
 ]
 keywords = [
+ "monad",
+ "fp",
+ "maybe",
+ "either",
 ]
 license = "MPL-2.0"
 maintainers = ["Ely Deckers"]
@@ -43,6 +47,9 @@ pre-commit-hooks = "^4.1"
 pytest = "^7"
 pytest-cov = "^4"
 python-semantic-release = "^7.25.2"
+
+[tool.poetry.group.docs.dependencies]
+sphinx_mdinclude = "^0.5.3"
 
 #########################################################################################
 # Testing

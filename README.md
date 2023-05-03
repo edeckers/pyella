@@ -22,7 +22,7 @@ pip3 install pyella
 ## Rationale
 
 Some of the main reasons for writing Pyella were:
-- I prefer the more explicit error handling `Either`s can bring compared to regular Exception handling
+- I prefer the more explicit error handling `Eithers` can bring compared to regular Exception handling
 - Whenever one of my applications crashes due to an NPE, which are almost always avoidable, I die a little inside. `Maybe` can help with that
 - A nice chain of `fmaps`, `binds`, et al looks satisfying to me
 
@@ -132,15 +132,15 @@ def fetch_some_interesting_url() -> Either[int, Response]:
         if response.status_code == 200 else \
             left(response.status_code)
 
-# We'll build upon this `error_response` variable in the
+# We'll build upon this `error_or_response` variable in the
 # examples below
-error_response = fetch_some_interesting_url()
+error_or_response = fetch_some_interesting_url()
 ```
 
 Maybe you want to print the status code
 
 ```python
-status_code = error_response.if_right(200)
+status_code = error_or_response.if_right(200)
 print ("Status code", status_code)
 
 # Output:
@@ -152,7 +152,7 @@ Or maybe you're looking for the occurence of a particular string in the response
 
 ```python
 is_my_string_there = \
-    error_response \
+    error_or_response \
         .fmap(lambda response:"monad" in response.text) \
         .if_left(False)
 print("Is my string there?", is_my_string_there)
@@ -174,7 +174,7 @@ def parse_response(response: Response) -> Either[int, dict]:
         return left(-1)
     
 error_or_parsed_response =
-    error_response \
+    error_or_response \
         .fmap(parse_response)
 print (error_or_parsed_response)
 ```
@@ -199,7 +199,7 @@ Surely there must be a better way to go about this, and there is!
 
 ```python
 error_or_parsed_response_with_bind =
-    error_response.bind(parse_response)
+    error_or_response.bind(parse_response)
 print (error_or_parsed_response_with_bind)
    
 # Output

@@ -22,7 +22,7 @@ pip3 install pyella
 ## Rationale
 
 Some of the main reasons for writing Pyella were:
-- I prefer the more explicit error handling `Either`s can bring compared to regular Exception handling
+- I prefer the more explicit error handling `Eithers` can bring compared to regular Exception handling
 - Whenever one of my applications crashes due to an NPE, which are almost always avoidable, I die a little inside. `Maybe` can help with that
 - A nice chain of `fmaps`, `binds`, et al looks satisfying to me
 

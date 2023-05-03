@@ -188,11 +188,11 @@ Seems like not such a bad idea at first glance, and it works:
 # Right: Right(Right({ "name": "pyella" }))
 ```
 
-...but that nesting a little confusing, unnecessary and reminds me of the
+...but that nesting is a little confusing, unnecessary and reminds me of the
 
                         P Y R A M I D  O F  D O O M
 
-      (https://en.wikipedia.org/wiki/Pyramid_of_doom_(programming))  
+      https://en.wikipedia.org/wiki/Pyramid_of_doom_(programming)
 
 
 Surely there must be a better way to go about this, and there is!

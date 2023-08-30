@@ -13,7 +13,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-description = "This library brings common monads such `Maybe` and `Either` to your Python projects."
+description = "This library brings common monads such as `Maybe` and `Either` to your Python projects"
 documentation = "https://github.com/edeckers/pyella"
 homepage = ""
 include = [
@@ -46,7 +46,8 @@ pre-commit = "^2.17"
 pre-commit-hooks = "^4.1"
 pytest = "^7"
 pytest-cov = "^4"
-python-semantic-release = "^7.25.2"
+python-semantic-release = "^8.0.8"
+twine = "^4.0.2"
 
 [tool.poetry.group.docs.dependencies]
 sphinx_mdinclude = "^0.5.3"
@@ -88,12 +89,11 @@ profile = "black"
 #########################################################################################
 
 [tool.semantic_release]
-branch = "develop"
 build_command = "poetry build"
-commit_subject = "chore: release {version}"
-changelog_file = "README.md"
-changelog_placeholder = "DISABLE_CHANGELOG_HACK"
-version_pattern = [
+commit_message = "chore: release {version}"
+version_toml = ["pyproject.toml:tool.poetry.version"]
+version_variables = [
 ]
-version_toml = "pyproject.toml:tool.poetry.version"
-upload_to_repository = true
+
+[tool.semantic_release.branches.develop]
+match = "develop"

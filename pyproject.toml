@@ -14,16 +14,9 @@ classifiers = [
 ]
 description = "This library brings common monads such as `Maybe` and `Either` to your Python projects"
 documentation = "https://github.com/edeckers/pyella"
-homepage = ""
-include = [
-    "LICENSE",
-]
-keywords = [
- "monad",
- "fp",
- "maybe",
- "either",
-]
+homepage = "https://pyella.readthedocs.io"
+include = ["LICENSE"]
+keywords = ["monad", "fp", "maybe", "either"]
 license = "MPL-2.0"
 maintainers = ["Ely Deckers"]
 name = "pyella"
@@ -37,7 +30,7 @@ python = ">=3.8"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 bandit = "^1.7"
-coverage = {extras = ["toml"], version = "^6.3.2"}
+coverage = { extras = ["toml"], version = "^6.3.2" }
 isort = "^5.10.1"
 mypy = "^0.931"
 nox = "^2022.1.7"
@@ -91,8 +84,13 @@ profile = "black"
 build_command = "poetry build"
 commit_message = "chore: release {version}"
 version_toml = ["pyproject.toml:tool.poetry.version"]
-version_variables = [
-]
+version_variables = []
 
 [tool.semantic_release.branches.develop]
 match = "develop"
+
+[tool.setuptools.package-data]
+"pyella" = ["py.typed"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

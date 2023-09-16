@@ -88,9 +88,3 @@ version_variables = []
 
 [tool.semantic_release.branches.develop]
 match = "develop"
-
-[tool.setuptools.package-data]
-"pyella" = ["py.typed"]
-
-[tool.setuptools.packages.find]
-where = ["src"]

@@ -2,6 +2,21 @@
 
 
 
+## v2.1.0 (2023-09-16)
+
+### Chore
+
+* chore: create poetry env in project root ([`091e3d5`](https://github.com/edeckers/pyella/commit/091e3d54b8ce2523d92586fb5bdde8c69fd9e5de))
+
+### Feature
+
+* feat: add py.typed (#17)
+
+* feat: add py.typed marker
+
+* fix(deps): update poetry.lock ([`cda0be8`](https://github.com/edeckers/pyella/commit/cda0be876ae0e8251320fd395f03267e04e60244))
+
+
 ## v2.0.0 (2023-08-30)
 
 ### Breaking

@@ -32,7 +32,7 @@ black = "^23.3.0"
 bandit = "^1.7"
 coverage = { extras = ["toml"], version = "^6.3.2" }
 isort = "^5.10.1"
-mypy = "^0.931"
+mypy = "^1.0.0"
 nox = "^2022.1.7"
 pre-commit = "^2.17"
 pre-commit-hooks = "^4.1"
@@ -75,6 +75,10 @@ target-version = ["py38", "py39"]
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+check_untyped_defs = true
+strict_optional = true
 
 #########################################################################################
 # Publishing

@@ -19,10 +19,15 @@ from typing import Callable, Generic, Iterable, List, Optional, TypeVar, Union, 
 from pyella.maybe import Maybe, nothing
 from pyella.shared import _const
 
-TA = TypeVar("TA")  # pylint: disable=invalid-name
-TB = TypeVar("TB")  # pylint: disable=invalid-name
-TC = TypeVar("TC")  # pylint: disable=invalid-name
-TD = TypeVar("TD")  # pylint: disable=invalid-name
+TA = TypeVar(  # pylint: disable=invalid-name,typevar-name-incorrect-variance
+    "TA", covariant=True
+)
+TB = TypeVar(  # pylint: disable=invalid-name,typevar-name-incorrect-variance
+    "TB", covariant=True
+)
+TC = TypeVar(  # pylint: disable=invalid-name,typevar-name-incorrect-variance
+    "TC", covariant=True
+)
 
 
 class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
@@ -66,13 +71,19 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
         """
         return fmap(self, apply)
 
-    def if_left(self, fallback: TB) -> TB:
+    def if_left(
+        self,
+        fallback: TB,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> TB:
         """
         Alias for :py:func:`if_left(self, fallback) <if_left>`
         """
         return if_left(self, fallback)
 
-    def if_right(self, fallback: TA) -> TA:
+    def if_right(
+        self,
+        fallback: TA,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> TA:
         """
         Alias for :py:func:`if_right(self, fallback) <if_right>`
         """
@@ -96,7 +107,9 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
         """
         return map_left(self, apply)
 
-    def replace(self, value: TC) -> Either[TA, TC]:
+    def replace(
+        self, value: TC  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> Either[TA, TC]:
         """
         Alias for :py:func:`replace(self, value) <replace>`
         """
@@ -115,7 +128,9 @@ class Either(Generic[TA, TB]):  # pylint: disable=too-few-public-methods
         return to_optional(self)
 
     @staticmethod
-    def pure(value: TB) -> Either[TA, TB]:  # pylint: disable=invalid-name
+    def pure(
+        value: TB,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> Either[TA, TB]:  # pylint: disable=invalid-name
         """
         Alias for :py:func:`pure(self) <pure>`
         """
@@ -177,7 +192,10 @@ def bind(em0: Either[TC, TA], apply: Callable[[TA], Either[TC, TB]]) -> Either[T
     return result
 
 
-def chain(em0: Either[TC, TA], em1: Either[TC, TB]) -> Either[TC, TB]:
+def chain(
+    em0: Either[TC, TA],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    em1: Either[TC, TB],
+) -> Either[TC, TB]:
     """
     Discard the current value of a :py:class:`Right[TA] <Right>` and replace it with the given :py:class:`Either[TC, TB] <Either>`
 
@@ -195,7 +213,9 @@ def discard(
     return em0.bind(apply).chain(em0)
 
 
-def replace(self, value: TC) -> Either[TA, TC]:
+def replace(
+    self, value: TC  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> Either[TA, TC]:
     """
     Replace the value of an :py:class:`Either` with a new value
 
@@ -222,7 +242,10 @@ def either(
     )
 
 
-def fmap(em0: Either[TC, TA], apply: Callable[[TA], TB]) -> Either[TC, TB]:
+def fmap(
+    em0: Either[TC, TA],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    apply: Callable[[TA], TB],
+) -> Either[TC, TB]:
     """
     Map a function over the value of an :py:class:`Either` when it's :py:class:`Right[TA] <Right>`, otherwise return
     itself
@@ -232,7 +255,10 @@ def fmap(em0: Either[TC, TA], apply: Callable[[TA], TB]) -> Either[TC, TB]:
     return bind(em0, lambda m0: pure(apply(m0)))
 
 
-def map_left(em0: Either[TA, TB], apply: Callable[[TA], TC]) -> Either[TC, TB]:
+def map_left(
+    em0: Either[TA, TB],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    apply: Callable[[TA], TC],
+) -> Either[TC, TB]:
     """
     Map a function over the value of an :py:class:`Either` when it's :py:class:`Left`, otherwise return
     itself
@@ -242,7 +268,10 @@ def map_left(em0: Either[TA, TB], apply: Callable[[TA], TC]) -> Either[TC, TB]:
     return either(lambda e: left(apply(e)), right, em0)
 
 
-def if_left(em0: Either[TA, TB], fallback: TB) -> TB:
+def if_left(
+    em0: Either[TA, TB],
+    fallback: TB,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> TB:
     """
     Return the contents of a :py:class:`Right[TB] <Right>` or a fallback value if it's :py:class:`Left`
 
@@ -251,7 +280,10 @@ def if_left(em0: Either[TA, TB], fallback: TB) -> TB:
     return fallback if em0.is_left() else cast(TB, em0.value)
 
 
-def if_right(em0: Either[TA, TB], fallback: TA) -> TA:
+def if_right(
+    em0: Either[TA, TB],
+    fallback: TA,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> TA:
     """
     Return the contents of a :py:class:`Left` or a fallback value if it's :py:class:`Right`
 
@@ -296,18 +328,22 @@ def rights(eithers: Iterable[Either[TA, TB]]) -> List[TB]:
     return list(map(lambda either: cast(TB, either.value), filter(is_right, eithers)))
 
 
-def left(value: TA) -> Left[TA, TB]:
+def left(
+    value: TA,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> Left[TA, TB]:
     "Create a :py:class:`Left[TA] <Left>` with the given value"
     return Left(value)
 
 
-def right(value: TB) -> Right[TA, TB]:
+def right(
+    value: TB,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> Right[TA, TB]:
     "Alias for :py:func:`pure(value) <pure>`"
     return pure(value)
 
 
 def to_maybe(
-    em0: Either[TA, TB]
+    em0: Either[TA, TB]  # type: ignore [misc] # covariant arg ok, b/c function is pure
 ) -> Maybe[TB]:  # pylint: disable=unsubscriptable-object
     """
     Convert an :py:class:`Either[TA, TB] <Either>` to a :py:class:`Maybe[TB] <Maybe>` by
@@ -332,7 +368,7 @@ def to_optional(
     return to_maybe(em0).to_optional()
 
 
-def pure(value: TA):
+def pure(value: TA):  # type: ignore [misc] # covariant arg ok, b/c function is pure
     """
     Create a :py:class:`Right[TA] <Right>` from a value
 

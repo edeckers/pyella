@@ -2,6 +2,13 @@
 
 
 
+## v3.0.1 (2023-09-21)
+
+### Fix
+
+* fix: add return type annotation for pure method (#19) ([`5d68a9e`](https://github.com/edeckers/pyella/commit/5d68a9ec05dbd3e2eb1f1e2c475667a6d97213e2))
+
+
 ## v3.0.0 (2023-09-21)
 
 ### Breaking

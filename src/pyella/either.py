@@ -372,9 +372,9 @@ def to_optional(
     return to_maybe(em0).to_optional()
 
 
-def pure(value: TA_co):  # type: ignore [misc] # covariant arg ok, b/c function is pure
+def pure(value: TB_co) -> Right[TA_co, TB_co]:  # type: ignore[misc] # covariant arg ok, b/c function is pure
     """
-    Create a :py:class:`Right[TA] <Right>` from a value
+    Create a :py:class:`Right[TB] <Right>` from a value
 
     .. note:: Haskell: `pure <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:pure>`__
     """

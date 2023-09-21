@@ -18,7 +18,14 @@ import pytest  # pylint: disable=import-error
 from pyella.either import Either, Left, Right, either, left, lefts, pure, right, rights
 from pyella.maybe import nothing
 from pyella.shared import _identity
-from tests.fixtures import is_list_instance_of, random_int, random_str, unique_ints
+from tests.fixtures import (
+    BaseClass,
+    SubClass,
+    is_list_instance_of,
+    random_int,
+    random_str,
+    unique_ints,
+)
 
 
 def _square(value: int) -> int:
@@ -458,4 +465,34 @@ class TestEither(unittest.TestCase):
         self.assertTrue(
             str(some_left_value) in left_result,
             "Stringified Left should contain its value",
+        )
+
+    def test_more_specific_type_is_allowed(self):
+        # arrange
+        some_value = random_int()
+
+        def this_triggers_mypy_incompatible_return_value_when_types_not_covariant(  # pylint: disable=duplicate-code
+            value: int,
+        ) -> Either[None, BaseClass]:
+            subclassed_value = SubClass(value)
+
+            none_or_subclassed_value: Either[None, SubClass] = Either.pure(
+                subclassed_value
+            )
+
+            return none_or_subclassed_value
+
+        # act
+        result = (
+            this_triggers_mypy_incompatible_return_value_when_types_not_covariant(
+                some_value
+            )
+            .fmap(lambda sc: sc.value)
+            .if_left(-1)
+        )
+
+        # assert
+        self.assertTrue(
+            some_value == result,
+            "Result should equal the generated value contained in the Either",
         )

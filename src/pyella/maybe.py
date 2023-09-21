@@ -19,43 +19,46 @@ from typing import Callable, Generic, Optional, TypeVar
 
 from pyella.shared import _const, _identity
 
-TA = TypeVar("TA")  # pylint: disable=invalid-name
-TB = TypeVar("TB")  # pylint: disable=invalid-name
+TA_co = TypeVar("TA_co", covariant=True)  # pylint: disable=invalid-name
+TB_co = TypeVar("TB_co", covariant=True)  # pylint: disable=invalid-name
 
 
-class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
+class Maybe(Generic[TA_co]):  # pylint: disable=too-few-public-methods
     """
     Provides a way to handle values that may or may not be present: A value of
     type ``Maybe[A]`` is either ``Nothing`` or ``Just[A]``.
     """
 
-    value: TA
+    value: TA_co
 
-    def bind(self, apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+    def bind(self, apply: Callable[[TA_co], Maybe[TB_co]]) -> Maybe[TB_co]:
         """
         Alias for :py:func:`bind(self, apply) <bind>`
         """
         return bind(self, apply)
 
-    def chain(self, em1: Maybe[TB]) -> Maybe[TB]:
+    def chain(self, em1: Maybe[TB_co]) -> Maybe[TB_co]:
         """
         Alias for :py:func:`chain(self, em1) <chain>`
         """
         return chain(self, em1)
 
-    def discard(self, apply: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+    def discard(self, apply: Callable[[TA_co], Maybe[TB_co]]) -> Maybe[TA_co]:
         """
         Alias for :py:func:`discard(self, apply) <discard>`
         """
         return discard(self, apply)
 
-    def fmap(self, apply: Callable[[TA], TB]) -> Maybe[TB]:
+    def fmap(self, apply: Callable[[TA_co], TB_co]) -> Maybe[TB_co]:
         """
         Alias for :py:func:`fmap(self, apply) <fmap>`
         """
         return fmap(self, apply)
 
-    def from_maybe(self, fallback: TA) -> TA:
+    def from_maybe(
+        self,
+        fallback: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> TA_co:
         """
         Alias for :py:func:`from_maybe(fallback, self) <from_maybe>`
         """
@@ -67,33 +70,41 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
         """
         return is_nothing(self)
 
-    def maybe(self: Maybe[TA], fallback: TB, apply: Callable[[TA], TB]) -> TB:
+    def maybe(
+        self: Maybe[TA_co],
+        fallback: TB_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+        apply: Callable[[TA_co], TB_co],
+    ) -> TB_co:
         """
         Alias for :py:func:`maybe(fallback, apply, self) <maybe>`
         """
         return maybe(fallback, apply, self)
 
-    def replace(self, value: TB) -> Maybe[TB]:
+    def replace(
+        self, value: TB_co  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> Maybe[TB_co]:
         """
         Alias for :py:func:`replace(self, value) <replace>`
         """
         return replace(self, value)
 
-    def to_optional(self) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+    def to_optional(self) -> Optional[TA_co]:  # pylint: disable=unsubscriptable-object
         """
         Alias for :py:func:`to_optional(self) <to_optional>`
         """
         return to_optional(self)
 
     @staticmethod
-    def of(value: TA):  # pylint: disable=invalid-name
+    def of(
+        value: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ):  # pylint: disable=invalid-name
         """
         Alias for :py:func:`of(value) <of>`
         """
         return of(value)
 
     @staticmethod
-    def pure(value: TA):
+    def pure(value: TA_co):  # type: ignore [misc] # covariant arg ok, b/c function is pure
         """
         Alias for :py:func:`pure(value) <pure>`
         """
@@ -109,21 +120,21 @@ class Maybe(Generic[TA]):  # pylint: disable=too-few-public-methods
         return __o.value == self.value
 
 
-class Just(Maybe[TA]):  # pylint: disable=too-few-public-methods
+class Just(Maybe[TA_co]):  # pylint: disable=too-few-public-methods
     """
     An instance of type ``Just[A]`` contains a value of type ``A``.
     """
 
-    value: TA
+    value: TA_co
 
-    def __init__(self, value: TA):
+    def __init__(self, value: TA_co):
         self.value = value
 
     def __str__(self) -> str:
         return f"Just({self.value.__str__()})"
 
 
-class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
+class Nothing(Maybe[TA_co]):  # pylint: disable=too-few-public-methods
     """
     An instance of type ``Nothing`` contains no value.
     """
@@ -135,7 +146,7 @@ class Nothing(Maybe[TA]):  # pylint: disable=too-few-public-methods
 nothing: Nothing = Nothing()
 
 
-def bind(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
+def bind(em0: Maybe[TA_co], apply: Callable[[TA_co], Maybe[TB_co]]) -> Maybe[TB_co]:
     """
     Map the value of a :py:class:`Just[TA] <Just>` to a new :py:class:`Maybe[TB] <Maybe>`
 
@@ -153,7 +164,10 @@ def bind(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TB]:
     return result
 
 
-def chain(em0: Maybe[TA], em1: Maybe[TB]) -> Maybe[TB]:
+def chain(
+    em0: Maybe[TA_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    em1: Maybe[TB_co],
+) -> Maybe[TB_co]:
     """
     Discard the current value of a :py:class:`Just[TA] <Just>` and replace it with the given :py:class:`Maybe[TA] <Maybe>`
 
@@ -162,14 +176,17 @@ def chain(em0: Maybe[TA], em1: Maybe[TB]) -> Maybe[TB]:
     return bind(em0, lambda _: em1)
 
 
-def discard(em0: Maybe[TA], apply: Callable[[TA], Maybe[TB]]) -> Maybe[TA]:
+def discard(em0: Maybe[TA_co], apply: Callable[[TA_co], Maybe[TB_co]]) -> Maybe[TA_co]:
     """
     Apply the given function to the value of a :py:class:`Just[TA] <Just>` and discard the result
     """
     return em0.bind(apply).chain(em0)
 
 
-def fmap(em0: Maybe[TA], apply: Callable[[TA], TB]) -> Maybe[TB]:
+def fmap(
+    em0: Maybe[TA_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    apply: Callable[[TA_co], TB_co],
+) -> Maybe[TB_co]:
     """
     Map a function over the value of a :py:class:`Maybe[TA] <Maybe>` when it's :py:class:`Just[TA] <Just>`, otherwise return :py:class:`Nothing`
 
@@ -178,7 +195,10 @@ def fmap(em0: Maybe[TA], apply: Callable[[TA], TB]) -> Maybe[TB]:
     return bind(em0, lambda m0: Just(apply(m0)))
 
 
-def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
+def from_maybe(
+    fallback: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    em0: Maybe[TA_co],
+) -> TA_co:
     """
     Return the value of a Maybe when it's Just, otherwise return a fallback value
 
@@ -187,7 +207,7 @@ def from_maybe(fallback: TA, em0: Maybe[TA]) -> TA:
     return maybe(fallback, _identity, em0)
 
 
-def is_nothing(em0: Maybe[TA]) -> bool:
+def is_nothing(em0: Maybe[TA_co]) -> bool:
     """
     Is the given Maybe Nothing?
 
@@ -196,7 +216,11 @@ def is_nothing(em0: Maybe[TA]) -> bool:
     return isinstance(em0, Nothing)
 
 
-def maybe(fallback: TB, apply: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
+def maybe(
+    fallback: TB_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    apply: Callable[[TA_co], TB_co],
+    em0: Maybe[TA_co],
+) -> TB_co:
     """
     Map and return the value of the given :py:class:`Maybe[TA]` when it's :py:class:`Just[TA] <Just>`, otherwise return a fallback value
 
@@ -207,7 +231,10 @@ def maybe(fallback: TB, apply: Callable[[TA], TB], em0: Maybe[TA]) -> TB:
     return fallback if is_nothing(em0) else apply(em0.value)
 
 
-def replace(em0: Maybe[TA], value: TB) -> Maybe[TB]:
+def replace(
+    em0: Maybe[TA_co],
+    value: TB_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> Maybe[TB_co]:
     """
     Replace the value of a :py:class:`Maybe` with a new value.
 
@@ -218,7 +245,7 @@ def replace(em0: Maybe[TA], value: TB) -> Maybe[TB]:
     return fmap(em0, _const(value))
 
 
-def pure(value: TA):
+def pure(value: TA_co):  # type: ignore [misc] # covariant arg ok, b/c function is pure
     """
     Create a :py:class:`Maybe[TA] <Maybe>` from a value
 
@@ -230,8 +257,8 @@ def pure(value: TA):
 
 
 def to_optional(
-    em0: Maybe[TA],
-) -> Optional[TA]:  # pylint: disable=unsubscriptable-object
+    em0: Maybe[TA_co],
+) -> Optional[TA_co]:  # pylint: disable=unsubscriptable-object
     """
     Convert a :py:class:`Maybe[TA] <Maybe>` to an
     `Optional[TA] <https://docs.python.org/3/library/typing.html#typing.Optional>`_
@@ -241,7 +268,9 @@ def to_optional(
     return maybe(None, _identity, em0)
 
 
-def of(value: TA) -> Maybe[TA]:  # pylint: disable=invalid-name
+def of(  # pylint: disable=invalid-name
+    value: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> Maybe[TA_co]:
     """
     Alias for :py:func:`pure(value) <bind>`
     """

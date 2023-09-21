@@ -1,9 +1,20 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
+from dataclasses import dataclass
 from random import randint, sample
 from typing import Any, List
 from uuid import uuid4
+
+
+@dataclass(frozen=True)
+class BaseClass:
+    value: int
+
+
+@dataclass(frozen=True)
+class SubClass(BaseClass):
+    pass
 
 
 def is_list_instance_of(items: List[Any], clazz: type) -> bool:

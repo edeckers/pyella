@@ -1539,13 +1539,13 @@ testing-integration = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "jar
 
 [[package]]
 name = "setuptools-scm"
-version = "8.0.0"
+version = "8.0.1"
 description = "the blessed package to manage your versions by scm tags"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-scm-8.0.0.tar.gz", hash = "sha256:40d5508fddd34e2ca6e44eefc0148ff76c80a66560c453c1eff9d5a6fc99c8f8"},
-    {file = "setuptools_scm-8.0.0-py3-none-any.whl", hash = "sha256:f6b9d6deb0f006681d4454bf20c950d333362ade49f7219e75ee75510ac35cf1"},
+    {file = "setuptools-scm-8.0.1.tar.gz", hash = "sha256:e69bf0b8265fdc8f4e070c98235b1b0816ffa8b7f91153400404bf68496012e3"},
+    {file = "setuptools_scm-8.0.1-py3-none-any.whl", hash = "sha256:c132f5a8dc508c8113f865c709041d1b15f7d500442220174c38397607797a91"},
 ]
 
 [package.dependencies]

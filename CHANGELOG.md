@@ -2,6 +2,15 @@
 
 
 
+## v3.0.0 (2023-09-21)
+
+### Breaking
+
+* feat: make types covariant (#18)
+
+BREAKING CHANGE: Types of both Either and Maybe are now covariant ([`17a90b5`](https://github.com/edeckers/pyella/commit/17a90b5203ff48bf6e7aebe4553b6918ab4fa3cc))
+
+
 ## v2.1.0 (2023-09-16)
 
 ### Chore

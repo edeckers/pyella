@@ -130,7 +130,7 @@ class Either(Generic[TA_co, TB_co]):  # pylint: disable=too-few-public-methods
         value: TB_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
     ) -> Either[TA_co, TB_co]:  # pylint: disable=invalid-name
         """
-        Alias for :py:func:`pure(self) <pure>`
+        Alias for :py:func:`pure(value) <pure>`
         """
         return pure(value)
 

@@ -28,7 +28,7 @@ version = "3.0.1"
 python = ">=3.8"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
+black = ">=23.3,<25.0"
 bandit = "^1.7"
 coverage = { extras = ["toml"], version = "^6.3.2" }
 isort = "^5.10.1"

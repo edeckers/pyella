@@ -78,6 +78,15 @@ class Either(Generic[TA_co, TB_co]):  # pylint: disable=too-few-public-methods
         """
         return if_left(self, fallback)
 
+    def if_left_fn(
+        self,
+        fn: Callable[[TA_co], TB_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> TB_co:
+        """
+        Alias for :py:func:`if_left_fn(self, fn) <if_left>`
+        """
+        return if_left_fn(self, fn)
+
     def if_right(
         self,
         fallback: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
@@ -86,6 +95,15 @@ class Either(Generic[TA_co, TB_co]):  # pylint: disable=too-few-public-methods
         Alias for :py:func:`if_right(self, fallback) <if_right>`
         """
         return if_right(self, fallback)
+
+    def if_right_fn(
+        self,
+        fn: Callable[[TB_co], TA_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+    ) -> TA_co:
+        """
+        Alias for :py:func:`if_right_fn(self, fn) <if_right>`
+        """
+        return if_right_fn(self, fn)
 
     def is_left(self) -> bool:
         """
@@ -286,6 +304,18 @@ def if_left(
     return fallback if em0.is_left() else cast(TB_co, em0.value)
 
 
+def if_left_fn(
+    em0: Either[TA_co, TB_co],
+    fn: Callable[[TA_co], TB_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> TB_co:
+    """
+    Return the contents of a :py:class:`Right[TB] <Right>` or a mapped left value if it's :py:class:`Left`
+
+    This is a convenience function which doesn't exist in the Haskell implementation
+    """
+    return fn(cast(TA_co, em0.value)) if em0.is_left() else cast(TB_co, em0.value)
+
+
 def if_right(
     em0: Either[TA_co, TB_co],
     fallback: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
@@ -296,6 +326,18 @@ def if_right(
     .. note:: Haskell: `fromLeft <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:fromLeft>`_
     """
     return fallback if em0.is_right() else cast(TA_co, em0.value)
+
+
+def if_right_fn(
+    em0: Either[TA_co, TB_co],
+    fn: Callable[[TB_co], TA_co],  # type: ignore [misc] # covariant arg ok, b/c function is pure
+) -> TA_co:
+    """
+    Return the contents of a :py:class:`Left` or a mapped right value if it's :py:class:`Right`
+
+    This is a convenience function which doesn't exist in the Haskell implementation
+    """
+    return fn(cast(TB_co, em0.value)) if em0.is_right() else cast(TA_co, em0.value)
 
 
 def is_left(em0: Either[TA_co, TB_co]) -> bool:

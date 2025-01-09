@@ -215,7 +215,7 @@ def discard(
 
 def replace(
     self, value: TC_co  # type: ignore [misc] # covariant arg ok, b/c function is pure
-) -> Either[TA_co, TC_co]:
+) -> Either[TA_co, TC_co]:  # type: ignore [misc] # TA_co only appears once use object, b/c chaining will break
     """
     Replace the value of an :py:class:`Either` with a new value
 
@@ -267,7 +267,11 @@ def map_left(
 
     .. note:: Haskell: `first <https://hackage.haskell.org/package/base/docs/Data-Either.html#v:first>`_
     """
-    return either(lambda e: left(apply(e)), right, em0)
+
+    def right_type_helper(value: TB_co) -> Either[TC_co, TB_co]:  # type: ignore [misc] # covariant arg ok, b/c function is pure
+        return right(value)
+
+    return either(lambda e: left(apply(e)), right_type_helper, em0)
 
 
 def if_left(
@@ -334,14 +338,14 @@ def rights(eithers: Iterable[Either[TA_co, TB_co]]) -> List[TB_co]:
 
 def left(
     value: TA_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
-) -> Left[TA_co, TB_co]:
+) -> Left[TA_co, TB_co]:  # type: ignore [misc] # TB_co only appears once use object, b/c chaining will break
     "Create a :py:class:`Left[TA] <Left>` with the given value"
-    return Left(value)
+    return Left[TA_co, TB_co](value)
 
 
 def right(
     value: TB_co,  # type: ignore [misc] # covariant arg ok, b/c function is pure
-) -> Right[TA_co, TB_co]:
+) -> Right[TA_co, TB_co]:  # type: ignore [misc] # TA_co only appears once use object, b/c chaining will break
     "Alias for :py:func:`pure(value) <pure>`"
     return pure(value)
 

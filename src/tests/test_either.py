@@ -39,7 +39,7 @@ def _m_square(value: int) -> Either[str, int]:
 
 
 # pylint: disable=unused-argument
-def _m_fail(value: int) -> Either[str, int]:
+def _m_fail(_: int) -> Either[str, int]:
     return left(random_str())
 
 
@@ -104,10 +104,18 @@ class TestEither(unittest.TestCase):
         # arrange
         some_random_value = random_int()
 
+        def right_type_helper(value: int) -> Either[str, int]:
+            return right(value)
+
+        def pure_type_helper(  # pylint: disable=unused-argument
+            value: int,
+        ) -> Either[str, int]:
+            return pure(value)
+
         right_initializers: List[Callable[[int], Either[str, int]]] = [
             Right,
-            right,
-            pure,
+            right_type_helper,
+            pure_type_helper,
         ]
 
         # act
@@ -137,7 +145,13 @@ class TestEither(unittest.TestCase):
         # arrange
         some_random_left_value = random_str()
 
-        left_initializers: List[Callable[[str], Either[str, int]]] = [Left, left]
+        def left_type_helper(value: str) -> Either[str, int]:
+            return left(value)
+
+        left_initializers: List[Callable[[str], Either[str, int]]] = [
+            Left,
+            left_type_helper,
+        ]
 
         # act
         results: List[Either[str, int]] = list(

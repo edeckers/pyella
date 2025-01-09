@@ -11,7 +11,9 @@ function install_git_hooks () {
 
 function install_poetry () {
   if [ -z ${POETRY} ]; then
-    curl -sSL https://install.python-poetry.org/ | python
+    # FIXME ED The poetry installer is pinned to version 1.8.5, because the 2.0.0
+    #          release breaks the build. We need to support 2.0.0 in the future though.
+    curl -sSL https://install.python-poetry.org/ |  POETRY_VERSION=1.8.5 python -
 
     try_source_env
   fi

@@ -276,6 +276,200 @@ class TestEither(unittest.TestCase):
             "Calling `bind` with function that doesn't return Either should throw an ArgumentTypeError",
         )
 
+    def test_if_left_returns_expected_results(self):
+        # arrange
+        some_value = random_str()
+        some_fallback_value = random_str()
+        some_fallback_fn = lambda v: str(v) + "!"
+
+        some_left_value = random_int()
+
+        some_right: Either[int, str] = Either.pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
+
+        # act
+        right_result_from_value = some_right.if_left(some_fallback_value)
+        right_result_from_fn = some_right.if_left(some_fallback_fn)
+        left_result_from_value = some_left.if_left(some_fallback_value)
+        left_result_from_fn = some_left.if_left(some_fallback_fn)
+
+        # assert
+        self.assertIsInstance(
+            right_result_from_value,
+            str,
+            "Calling `if_left` with fallback value on Right should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            right_result_from_fn,
+            str,
+            "Calling `if_left` with Callable on Left should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            left_result_from_value,
+            str,
+            "Calling `if_left` with fallback value on Left should return fallback value",
+        )
+        self.assertIsInstance(
+            left_result_from_fn,
+            str,
+            "Calling `if_left` with Callable on Left should return fallback value",
+        )
+
+        self.assertEqual(
+            some_value,
+            right_result_from_value,
+            "Calling `if_left` on Right should return unaltered Right value",
+        )
+        self.assertEqual(
+            some_value,
+            right_result_from_fn,
+            "Calling `if_left` on Right with Callable should return unaltered Right value",
+        )
+        self.assertEqual(
+            some_fallback_value,
+            left_result_from_value,
+            "Calling `if_left` on Left should return unalterted fallback value",
+        )
+        self.assertEqual(
+            some_fallback_fn(some_left_value),
+            left_result_from_fn,
+            "Calling `if_left` on Left with Callable should return mapped Left value",
+        )
+
+    def test_if_right_returns_expected_results(self):
+        # arrange
+        some_value = random_int()
+        some_fallback_value = random_int()
+        some_fallback_fn = lambda v: v * 2
+
+        some_left_value = random_int()
+
+        some_right: Either[int, str] = Either.pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
+
+        # act
+        right_result_from_value = some_right.if_right(some_fallback_value)
+        right_result_from_fn = some_right.if_right(some_fallback_fn)
+        left_result_from_value = some_left.if_right(some_fallback_value)
+        left_result_from_fn = some_left.if_right(some_fallback_fn)
+
+        # assert
+        self.assertIsInstance(
+            right_result_from_value,
+            int,
+            "Calling `if_right` with fallback value on Right should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            right_result_from_fn,
+            int,
+            "Calling `if_right` with Callable on Left should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            left_result_from_value,
+            int,
+            "Calling `if_right` with fallback value on Left should return fallback value",
+        )
+        self.assertIsInstance(
+            left_result_from_fn,
+            int,
+            "Calling `if_right` with Callable on Left should return fallback value",
+        )
+
+        self.assertEqual(
+            some_fallback_value,
+            right_result_from_value,
+            "Calling `if_right` on Right should return unalterted fallback value",
+        )
+        self.assertEqual(
+            some_fallback_fn(some_value),
+            right_result_from_fn,
+            "Calling `if_right` on Right with Callable should return mapped Left value",
+        )
+        self.assertEqual(
+            some_left_value,
+            left_result_from_value,
+            "Calling `if_right` on Left should return unaltered Left value",
+        )
+        self.assertEqual(
+            some_left_value,
+            left_result_from_fn,
+            "Calling `if_right` on Left with Callable should return unaltered Left value",
+        )
+
+    def test_if_left_fn_returns_expected_results(self):
+        # arrange
+        some_value = random_str()
+        some_fallback_fn = lambda v: str(v) + "!"
+
+        some_left_value = random_int()
+
+        some_right: Either[int, str] = Either.pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
+
+        # act
+        right_result_from_fn = some_right.if_left_fn(some_fallback_fn)
+        left_result_from_fn = some_left.if_left_fn(some_fallback_fn)
+
+        # assert
+        self.assertIsInstance(
+            right_result_from_fn,
+            str,
+            "Calling `if_left` with Callable on Left should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            left_result_from_fn,
+            str,
+            "Calling `if_left` with Callable on Left should return fallback value",
+        )
+
+        self.assertEqual(
+            some_value,
+            right_result_from_fn,
+            "Calling `if_left` on Right with Callable should return unaltered Right value",
+        )
+        self.assertEqual(
+            some_fallback_fn(some_left_value),
+            left_result_from_fn,
+            "Calling `if_left` on Left with Callable should return mapped Left value",
+        )
+
+    def test_if_right_fn_returns_expected_results(self):
+        # arrange
+        some_value = random_int()
+        some_fallback_fn = lambda v: v * 2
+
+        some_left_value = random_int()
+
+        some_right: Either[int, str] = Either.pure(some_value)
+        some_left: Either[int, str] = left(some_left_value)
+
+        # act
+        right_result_from_fn = some_right.if_right_fn(some_fallback_fn)
+        left_result_from_fn = some_left.if_right_fn(some_fallback_fn)
+
+        # assert
+        self.assertIsInstance(
+            right_result_from_fn,
+            int,
+            "Calling `if_right` with Callable on Left should return unaltered Right value",
+        )
+        self.assertIsInstance(
+            left_result_from_fn,
+            int,
+            "Calling `if_right` with Callable on Left should return fallback value",
+        )
+
+        self.assertEqual(
+            some_fallback_fn(some_value),
+            right_result_from_fn,
+            "Calling `if_right` on Right with Callable should return mapped Left value",
+        )
+        self.assertEqual(
+            some_left_value,
+            left_result_from_fn,
+            "Calling `if_right` on Left with Callable should return unaltered Left value",
+        )
+
     def test_rights_and_lefts_return_expected_results(self):
         # arrange
         right_values = unique_ints()

@@ -2,6 +2,310 @@
 
 
 
+## v3.1.0 (2025-01-09)
+
+### Chore
+
+* chore(deps-dev): bump jinja2 from 3.1.4 to 3.1.5 (#40)
+
+Bumps [jinja2](https://github.com/pallets/jinja) from 3.1.4 to 3.1.5.
+- [Release notes](https://github.com/pallets/jinja/releases)
+- [Changelog](https://github.com/pallets/jinja/blob/main/CHANGES.rst)
+- [Commits](https://github.com/pallets/jinja/compare/3.1.4...3.1.5)
+
+---
+updated-dependencies:
+- dependency-name: jinja2
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`2527651`](https://github.com/edeckers/pyella/commit/25276517899cf532875bfd4437bfbe90f80c151a))
+
+* chore(deps-dev): bump cryptography from 42.0.4 to 43.0.1 (#39)
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 42.0.4 to 43.0.1.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/42.0.4...43.0.1)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`ae8a939`](https://github.com/edeckers/pyella/commit/ae8a939b37cab78ffd6516b0d540a6ee749a29c7))
+
+* chore(deps-dev): bump zipp from 3.17.0 to 3.19.1 (#38)
+
+Bumps [zipp](https://github.com/jaraco/zipp) from 3.17.0 to 3.19.1.
+- [Release notes](https://github.com/jaraco/zipp/releases)
+- [Changelog](https://github.com/jaraco/zipp/blob/main/NEWS.rst)
+- [Commits](https://github.com/jaraco/zipp/compare/v3.17.0...v3.19.1)
+
+---
+updated-dependencies:
+- dependency-name: zipp
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`03093db`](https://github.com/edeckers/pyella/commit/03093db98186e06fc1194fa79b5e7a428d958480))
+
+* chore(deps-dev): bump pydantic from 2.3.0 to 2.4.0 (#37)
+
+Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.3.0 to 2.4.0.
+- [Release notes](https://github.com/pydantic/pydantic/releases)
+- [Changelog](https://github.com/pydantic/pydantic/blob/main/HISTORY.md)
+- [Commits](https://github.com/pydantic/pydantic/compare/v2.3.0...v2.4.0)
+
+---
+updated-dependencies:
+- dependency-name: pydantic
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`0bd7d4c`](https://github.com/edeckers/pyella/commit/0bd7d4cc91b436aa1fee7ccc61ce97ea02d11b57))
+
+* chore(deps-dev): bump setuptools from 68.2.2 to 70.0.0 (#36)
+
+Bumps [setuptools](https://github.com/pypa/setuptools) from 68.2.2 to 70.0.0.
+- [Release notes](https://github.com/pypa/setuptools/releases)
+- [Changelog](https://github.com/pypa/setuptools/blob/main/NEWS.rst)
+- [Commits](https://github.com/pypa/setuptools/compare/v68.2.2...v70.0.0)
+
+---
+updated-dependencies:
+- dependency-name: setuptools
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`95c3fe1`](https://github.com/edeckers/pyella/commit/95c3fe103fe48ecf87964dfe4333b148b4aebc59))
+
+* chore(deps-dev): bump idna from 3.4 to 3.7 (#35)
+
+Bumps [idna](https://github.com/kjd/idna) from 3.4 to 3.7.
+- [Release notes](https://github.com/kjd/idna/releases)
+- [Changelog](https://github.com/kjd/idna/blob/master/HISTORY.rst)
+- [Commits](https://github.com/kjd/idna/compare/v3.4...v3.7)
+
+---
+updated-dependencies:
+- dependency-name: idna
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`32a2be4`](https://github.com/edeckers/pyella/commit/32a2be49e7d34287cc13c63feb9bc23e614c270e))
+
+* chore(deps-dev): bump jinja2 from 3.1.3 to 3.1.4 (#34)
+
+Bumps [jinja2](https://github.com/pallets/jinja) from 3.1.3 to 3.1.4.
+- [Release notes](https://github.com/pallets/jinja/releases)
+- [Changelog](https://github.com/pallets/jinja/blob/main/CHANGES.rst)
+- [Commits](https://github.com/pallets/jinja/compare/3.1.3...3.1.4)
+
+---
+updated-dependencies:
+- dependency-name: jinja2
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`47e1980`](https://github.com/edeckers/pyella/commit/47e198059fd7c5f3caf7c7baba9802ea12548026))
+
+* chore(deps-dev): bump certifi from 2023.7.22 to 2024.7.4 (#33)
+
+Bumps [certifi](https://github.com/certifi/python-certifi) from 2023.7.22 to 2024.7.4.
+- [Commits](https://github.com/certifi/python-certifi/compare/2023.07.22...2024.07.04)
+
+---
+updated-dependencies:
+- dependency-name: certifi
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`aef269c`](https://github.com/edeckers/pyella/commit/aef269cb2bdf871d4d00a286c2656d0f10295cbd))
+
+* chore(deps-dev): bump requests from 2.31.0 to 2.32.2 (#32)
+
+Bumps [requests](https://github.com/psf/requests) from 2.31.0 to 2.32.2.
+- [Release notes](https://github.com/psf/requests/releases)
+- [Changelog](https://github.com/psf/requests/blob/main/HISTORY.md)
+- [Commits](https://github.com/psf/requests/compare/v2.31.0...v2.32.2)
+
+---
+updated-dependencies:
+- dependency-name: requests
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4c1727f`](https://github.com/edeckers/pyella/commit/4c1727f33c8a5df4f900f3ac15c45d26764971ec))
+
+* chore(deps-dev): bump urllib3 from 2.0.7 to 2.2.2 (#31)
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.7 to 2.2.2.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/2.0.7...2.2.2)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`0c5e3d0`](https://github.com/edeckers/pyella/commit/0c5e3d0de5618d565fa8ac78bb61f785632f2916))
+
+* chore(deps-dev): bump black from 23.9.1 to 24.3.0 (#30)
+
+Bumps [black](https://github.com/psf/black) from 23.9.1 to 24.3.0.
+- [Release notes](https://github.com/psf/black/releases)
+- [Changelog](https://github.com/psf/black/blob/main/CHANGES.md)
+- [Commits](https://github.com/psf/black/compare/23.9.1...24.3.0)
+
+---
+updated-dependencies:
+- dependency-name: black
+  dependency-type: direct:development
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`7e491e0`](https://github.com/edeckers/pyella/commit/7e491e030b68040ad7dcd49b0d477dfaa32cefad))
+
+* chore(deps-dev): bump cryptography from 41.0.6 to 42.0.4 (#28)
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.6 to 42.0.4.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/41.0.6...42.0.4)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`1ab3087`](https://github.com/edeckers/pyella/commit/1ab30871e37f4ef5474de217680037bd37e7f605))
+
+* chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3 (#25)
+
+Bumps [jinja2](https://github.com/pallets/jinja) from 3.1.2 to 3.1.3.
+- [Release notes](https://github.com/pallets/jinja/releases)
+- [Changelog](https://github.com/pallets/jinja/blob/main/CHANGES.rst)
+- [Commits](https://github.com/pallets/jinja/compare/3.1.2...3.1.3)
+
+---
+updated-dependencies:
+- dependency-name: jinja2
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4195394`](https://github.com/edeckers/pyella/commit/41953941b12182055603e46d416b3c0c047345f8))
+
+* chore(deps-dev): bump gitpython from 3.1.37 to 3.1.41 (#24)
+
+Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.37 to 3.1.41.
+- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
+- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
+- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.37...3.1.41)
+
+---
+updated-dependencies:
+- dependency-name: gitpython
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`2f22595`](https://github.com/edeckers/pyella/commit/2f22595668d2fbc8abee6e8c338c4061eededc1c))
+
+* chore(deps-dev): bump cryptography from 41.0.4 to 41.0.6 (#23)
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.4 to 41.0.6.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/41.0.4...41.0.6)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4edbdc1`](https://github.com/edeckers/pyella/commit/4edbdc1737904b9ef3b5742bc7be6c99b1090aeb))
+
+* chore(deps-dev): bump urllib3 from 2.0.6 to 2.0.7 (#22)
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.6 to 2.0.7.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/2.0.6...2.0.7)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`644dfce`](https://github.com/edeckers/pyella/commit/644dfce9e7a532c046764deff48f64c613d04cb0))
+
+* chore(deps-dev): bump gitpython from 3.1.36 to 3.1.37 (#21)
+
+Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.36 to 3.1.37.
+- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
+- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
+- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.36...3.1.37)
+
+---
+updated-dependencies:
+- dependency-name: gitpython
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`2601ec1`](https://github.com/edeckers/pyella/commit/2601ec14a2fb4c1d765aa985834598a0db364d4e))
+
+* chore(deps-dev): bump urllib3 from 2.0.5 to 2.0.6 (#20)
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.5 to 2.0.6.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/v2.0.5...2.0.6)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4a85480`](https://github.com/edeckers/pyella/commit/4a854806249f0969f3c82ccb9d2db393da92be44))
+
+### Feature
+
+* feat: add if_left_fn and if_right_fn (#42)
+
+* feat: add callable if_left and if_right
+
+* fix: remove callable if_left and if_right ([`95a4efa`](https://github.com/edeckers/pyella/commit/95a4efa84ec66ea6049cb82b5a344e365a2a1d70))
+
+### Refactor
+
+* refactor: repair type hints for generics (#43)
+
+* refactor: repair type hints for generics
+
+* fix: drop Poetry version from 2.0.0 to 1.8.5 ([`3eed99f`](https://github.com/edeckers/pyella/commit/3eed99fce0d73ff1863845b19a096a59778360c1))
+
+
 ## v3.0.1 (2023-09-21)
 
 ### Fix
